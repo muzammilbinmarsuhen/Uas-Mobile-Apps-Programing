@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList, ScrollView, TextInput, Dimensions } from 'react-native';
+import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
 
 const { width } = Dimensions.get('window');
 const logo = require('../assets/bakso.png');
@@ -17,8 +18,18 @@ const menuImages = [
   { id: '6', menu: require('../assets/menu/6.jpeg'), title: "Menu 6", likes: 60 },
 ];
 
+const categories = [
+  { id: '1', name: 'Populer' },
+  { id: '2', name: 'Bakso' },
+  { id: '3', name: 'Mie Bakso' },
+  { id: '4', name: 'Minuman' },
+];
+
 const HomeScreen = () => {
+  const navigation = useNavigation(); // Initialize navigation
+
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState('1');
 
   const onBannerScroll = (event) => {
     const newIndex = Math.floor(event.nativeEvent.contentOffset.x / width);
@@ -40,6 +51,35 @@ const HomeScreen = () => {
         </View>
       </View>
     </View>
+  );
+
+  const handleCategoryPress = (categoryId) => {
+    // Navigate to respective category screen based on categoryId
+    switch (categoryId) {
+      case '2':
+        navigation.navigate('BaksoScreen'); // Navigate to BaksoScreen
+        break;
+      case '3':
+        navigation.navigate('MieBaksoScreen'); // Navigate to MieBaksoScreen
+        break;
+      case '4':
+        navigation.navigate('MinumanScreen'); // Navigate to MinumanScreen
+        break;
+      default:
+        // Handle default action
+        break;
+    }
+  };
+
+  const renderCategoryItem = ({ item }) => (
+    <TouchableOpacity 
+      style={[styles.categoryItem, selectedCategory === item.id && styles.selectedCategoryItem]} 
+      onPress={() => handleCategoryPress(item.id)}
+      key={item.id}
+    >
+      <Text style={styles.categoryText}>{item.name}</Text>
+      {selectedCategory === item.id && <View style={styles.categoryIndicator} />}
+    </TouchableOpacity>
   );
 
   return (
@@ -72,27 +112,19 @@ const HomeScreen = () => {
         </View>
       </View>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Today's Event</Text>
-        <View style={styles.eventCard}>
-          <Image source={bannerImages[0].banner} style={styles.eventImage} />
-          <Text style={styles.eventText}>Picture book, online store</Text>
-        </View>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Popular</Text>
+      <View style={styles.categoryContainer}>
         <FlatList
-          data={menuImages}
-          renderItem={renderMenuItem}
+          data={categories}
+          renderItem={renderCategoryItem}
           keyExtractor={item => item.id}
-          showsVerticalScrollIndicator={false}
-          style={styles.menuList}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.categoryList}
         />
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Explosion Today</Text>
+        <Text style={styles.sectionTitle}>Popular</Text>
         <FlatList
           data={menuImages}
           renderItem={renderMenuItem}
@@ -149,7 +181,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: 10,
     backgroundColor: '#FFF',
-    color: '#333', // Warna teks di search bar
+    color: '#333',
   },
   bannerContainer: {
     paddingHorizontal: 10,
@@ -179,6 +211,32 @@ const styles = StyleSheet.create({
   activeIndicator: {
     backgroundColor: '#FF6347',
   },
+  categoryContainer: {
+    paddingHorizontal: 10,
+    paddingVertical: 20,
+  },
+  categoryList: {
+    paddingHorizontal: 10,
+  },
+  categoryItem: {
+    padding: 10,
+    marginRight: 10,
+    alignItems: 'center',
+  },
+  selectedCategoryItem: {
+    borderBottomWidth: 2,
+    borderBottomColor: '#FF6347',
+  },
+  categoryText: {
+    fontSize: 16,
+    color: '#333',
+  },
+  categoryIndicator: {
+    width: 20,
+    height: 2,
+    backgroundColor: '#FF6347',
+    marginTop: 5,
+  },
   section: {
     paddingHorizontal: 10,
     marginBottom: 20,
@@ -187,24 +245,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
-    color: '#333', // Warna teks judul section
-  },
-  eventCard: {
-    backgroundColor: '#FFF',
-    borderRadius: 10,
-    padding: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  eventImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 10,
-    marginRight: 10,
-  },
-  eventText: {
-    fontSize: 16,
-    color: '#333', // Warna teks event
+    color: '#333',
   },
   menuList: {
     paddingHorizontal: 10,
@@ -229,7 +270,7 @@ const styles = StyleSheet.create({
   menuTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#333', // Warna teks judul menu
+    color: '#333',
   },
   menuLikeContainer: {
     flexDirection: 'row',
@@ -241,46 +282,42 @@ const styles = StyleSheet.create({
     height: 20,
     marginRight: 5,
   },
-  menuLikes: {
-    fontSize: 14,
-    color: '#888', // Warna teks jumlah suka
-  },
+  
   orderButton: {
     backgroundColor: '#FF6347',
     paddingVertical: 15,
-    paddingHorizontal: 30,
-    borderRadius: 5,
-    alignSelf: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    marginHorizontal: 50,
     marginBottom: 20,
   },
   orderButtonText: {
-    color: '#FFFFFF',
+    color: '#FFF',
     fontSize: 18,
     fontWeight: 'bold',
   },
   infoText: {
-    color: '#333333', // Warna teks info
-    fontSize: 16,
     textAlign: 'center',
-    marginBottom: 10,
+    fontSize: 14,
+    color: '#666',
+    marginTop: 10,
   },
   socialLinks: {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
+    marginTop: 20,
+    marginBottom: 30,
   },
   socialText: {
-    color: '#333333', // Warna teks social text
-    fontSize: 16,
     marginRight: 10,
+    fontSize: 16,
+    color: '#666',
   },
   socialIcon: {
-    width: 40,
-    height: 40,
-    marginHorizontal: 5,
+    width: 30,
+    height: 30,
+    marginRight: 10,
   },
 });
 
 export default HomeScreen;
-
