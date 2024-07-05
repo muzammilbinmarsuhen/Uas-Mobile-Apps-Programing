@@ -4,20 +4,20 @@ import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList, ScrollView, 
 const { width } = Dimensions.get('window');
 const logo = require('../assets/bakso.png');
 const bannerImages = [
-  { id: '1', banner: require('../assets/banner.jpg') }, // Replace with your actual banner image path
-  { id: '2', banner: require('../assets/banner2.jpg') }, // Replace with your actual banner image path
-  { id: '3', banner: require('../assets/banner3.jpg') }  // Replace with your actual banner image path
+  { id: '1', banner: require('../assets/banner.jpg') },
+  { id: '2', banner: require('../assets/banner2.jpg') },
+  { id: '3', banner: require('../assets/banner3.jpg') }
 ];
 const menuImages = [
-  { id: '1', menu: require('../assets/menu/2.jpeg') },
-  { id: '2', menu: require('../assets/menu/3.jpeg') },
-  { id: '3', menu: require('../assets/menu/4.jpeg') },
-  { id: '4', menu: require('../assets/menu/1.jpeg') },
-  { id: '5', menu: require('../assets/menu/5.jpeg') },
-  { id: '6', menu: require('../assets/menu/6.jpeg') },
+  { id: '1', menu: require('../assets/menu/2.jpeg'), title: "Menu 1", likes: 10 },
+  { id: '2', menu: require('../assets/menu/3.jpeg'), title: "Menu 2", likes: 20 },
+  { id: '3', menu: require('../assets/menu/4.jpeg'), title: "Menu 3", likes: 30 },
+  { id: '4', menu: require('../assets/menu/1.jpeg'), title: "Menu 4", likes: 40 },
+  { id: '5', menu: require('../assets/menu/5.jpeg'), title: "Menu 5", likes: 50 },
+  { id: '6', menu: require('../assets/menu/6.jpeg'), title: "Menu 6", likes: 60 },
 ];
 
-const HomeScreen = () => {
+const Home = () => {
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
 
   const onBannerScroll = (event) => {
@@ -29,8 +29,17 @@ const HomeScreen = () => {
     <Image source={item.banner} style={styles.bannerImage} key={item.id} />
   );
 
-  const renderItem = ({ item }) => (
-    <Image source={item.menu} style={styles.menuImage} key={item.id} />
+  const renderMenuItem = ({ item }) => (
+    <View style={styles.menuCard} key={item.id}>
+      <Image source={item.menu} style={styles.menuImage} />
+      <View style={styles.menuTextContainer}>
+        <Text style={styles.menuTitle}>{item.title}</Text>
+        <View style={styles.menuLikeContainer}>
+          <Image source={require('../assets/like.png')} style={styles.likeIcon} />
+          <Text style={styles.menuLikes}>{item.likes}</Text>
+        </View>
+      </View>
+    </View>
   );
 
   return (
@@ -53,6 +62,7 @@ const HomeScreen = () => {
           showsHorizontalScrollIndicator={false}
           pagingEnabled
           onScroll={onBannerScroll}
+          scrollEventThrottle={16}
           style={styles.bannerList}
         />
         <View style={styles.indicatorContainer}>
@@ -74,21 +84,22 @@ const HomeScreen = () => {
         <Text style={styles.sectionTitle}>Popular</Text>
         <FlatList
           data={menuImages}
-          renderItem={renderItem}
+          renderItem={renderMenuItem}
           keyExtractor={item => item.id}
-          horizontal
-          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
           style={styles.menuList}
         />
       </View>
 
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Explosion Today</Text>
-        <View style={styles.explosionList}>
-          {menuImages.map((item) => (
-            <Image key={item.id} source={item.menu} style={styles.explosionImage} />
-          ))}
-        </View>
+        <FlatList
+          data={menuImages}
+          renderItem={renderMenuItem}
+          keyExtractor={item => item.id}
+          showsVerticalScrollIndicator={false}
+          style={styles.menuList}
+        />
       </View>
 
       <TouchableOpacity style={styles.orderButton}>
@@ -147,7 +158,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   bannerImage: {
-    width: width - 40, // Adjust width to fit your design
+    width: width - 5,
     height: 150,
     borderRadius: 10,
     marginRight: 10,
@@ -195,22 +206,40 @@ const styles = StyleSheet.create({
   menuList: {
     paddingHorizontal: 10,
   },
-  menuImage: {
-    width: 100,
-    height: 100,
-    marginRight: 10,
-    borderRadius: 10,
-  },
-  explosionList: {
+  menuCard: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  explosionImage: {
-    width: '48%',
-    height: 150,
-    marginBottom: 10,
+    backgroundColor: '#FFF',
     borderRadius: 10,
+    padding: 10,
+    marginBottom: 10,
+    alignItems: 'center',
+  },
+  menuImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 10,
+    marginRight: 10,
+  },
+  menuTextContainer: {
+    flex: 1,
+  },
+  menuTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  menuLikeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 5,
+  },
+  likeIcon: {
+    width: 20,
+    height: 20,
+    marginRight: 5,
+  },
+  menuLikes: {
+    fontSize: 14,
+    color: '#888',
   },
   orderButton: {
     backgroundColor: '#FF6347',
@@ -249,4 +278,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+
+
+export default Home;
