@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList, ScrollView } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList, ScrollView, TextInput } from 'react-native';
 
 const logo = require('../assets/bakso.png');
+const bannerImage = require('../assets/banner.jpg'); // Replace with your actual banner image path
 const menuImages = [
   { id: '1', menu: require('../assets/menu/2.jpeg') },
   { id: '2', menu: require('../assets/menu/3.jpeg') },
@@ -20,20 +21,39 @@ const HomeScreen = () => {
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Image source={logo} style={styles.logo} />
-        <Text style={styles.headerText}>Quality goods, waiting for you to choose!</Text>
+        <TextInput
+          style={styles.searchBar}
+          placeholder="Search"
+          placeholderTextColor="#888"
+        />
       </View>
 
-      <FlatList
-        data={menuImages}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.menuList}
-      />
+      <View style={styles.bannerContainer}>
+        <Image source={bannerImage} style={styles.bannerImage} />
+      </View>
 
-      <View style={styles.explosionSection}>
-        <Text style={styles.explosionTitle}>Explosion today</Text>
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Today's Event</Text>
+        <View style={styles.eventCard}>
+          <Image source={bannerImage} style={styles.eventImage} />
+          <Text style={styles.eventText}>Picture book, online store</Text>
+        </View>
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Popular</Text>
+        <FlatList
+          data={menuImages}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.menuList}
+        />
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Explosion Today</Text>
         <View style={styles.explosionList}>
           {menuImages.map((item) => (
             <Image key={item.id} source={item.menu} style={styles.explosionImage} />
@@ -70,38 +90,67 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8F8F8',
   },
   header: {
+    flexDirection: 'row',
     alignItems: 'center',
-    padding: 20,
+    padding: 10,
     backgroundColor: '#FFF',
-    marginBottom: 10,
   },
   logo: {
-    width: 100,
-    height: 100,
+    width: 50,
+    height: 50,
   },
-  headerText: {
+  searchBar: {
+    flex: 1,
+    height: 40,
+    marginLeft: 10,
+    borderColor: '#ddd',
+    borderWidth: 1,
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    backgroundColor: '#FFF',
+  },
+  bannerContainer: {
+    paddingHorizontal: 10,
+    paddingVertical: 20,
+  },
+  bannerImage: {
+    width: '100%',
+    height: 150,
+    borderRadius: 10,
+  },
+  section: {
+    paddingHorizontal: 10,
+    marginBottom: 20,
+  },
+  sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginTop: 10,
+    marginBottom: 10,
+  },
+  eventCard: {
+    backgroundColor: '#FFF',
+    borderRadius: 10,
+    padding: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  eventImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 10,
+    marginRight: 10,
+  },
+  eventText: {
+    fontSize: 16,
   },
   menuList: {
     paddingHorizontal: 10,
-    marginBottom: 20,
   },
   menuImage: {
     width: 100,
     height: 100,
     marginRight: 10,
     borderRadius: 10,
-  },
-  explosionSection: {
-    paddingHorizontal: 20,
-    marginBottom: 20,
-  },
-  explosionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
   },
   explosionList: {
     flexDirection: 'row',
