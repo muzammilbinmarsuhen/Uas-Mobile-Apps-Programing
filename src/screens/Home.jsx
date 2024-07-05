@@ -2,7 +2,11 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList, ScrollView, TextInput } from 'react-native';
 
 const logo = require('../assets/bakso.png');
-const bannerImage = require('../assets/banner.jpg'); // Replace with your actual banner image path
+const bannerImages = [
+  { id: '1', banner: require('../assets/banner.jpg') }, // Replace with your actual banner image path
+  { id: '2', banner: require('../assets/banner2.jpg') }, // Replace with your actual banner image path
+  { id: '3', banner: require('../assets/banner3.jpg') }  // Replace with your actual banner image path
+];
 const menuImages = [
   { id: '1', menu: require('../assets/menu/2.jpeg') },
   { id: '2', menu: require('../assets/menu/3.jpeg') },
@@ -13,6 +17,10 @@ const menuImages = [
 ];
 
 const HomeScreen = () => {
+  const renderBannerItem = ({ item }) => (
+    <Image source={item.banner} style={styles.bannerImage} key={item.id} />
+  );
+
   const renderItem = ({ item }) => (
     <Image source={item.menu} style={styles.menuImage} key={item.id} />
   );
@@ -29,13 +37,21 @@ const HomeScreen = () => {
       </View>
 
       <View style={styles.bannerContainer}>
-        <Image source={bannerImage} style={styles.bannerImage} />
+        <FlatList
+          data={bannerImages}
+          renderItem={renderBannerItem}
+          keyExtractor={item => item.id}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          pagingEnabled
+          style={styles.bannerList}
+        />
       </View>
 
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Today's Event</Text>
         <View style={styles.eventCard}>
-          <Image source={bannerImage} style={styles.eventImage} />
+          <Image source={bannerImages[0].banner} style={styles.eventImage} />
           <Text style={styles.eventText}>Picture book, online store</Text>
         </View>
       </View>
@@ -113,10 +129,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 20,
   },
+  bannerList: {
+    paddingHorizontal: 10,
+  },
   bannerImage: {
-    width: '100%',
+    width: 300, // Adjust width to fit your design
     height: 150,
     borderRadius: 10,
+    marginRight: 10,
   },
   section: {
     paddingHorizontal: 10,
