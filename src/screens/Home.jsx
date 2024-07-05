@@ -1,23 +1,27 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList, ScrollView } from 'react-native';
 
-const logo = require('../assets/bakso.png'); // Ganti dengan URL logo toko bakso Anda
+const logo = require('../assets/bakso.png');
 const menuImages = [
   { id: '1', menu: require('../assets/menu/2.jpeg') },
   { id: '2', menu: require('../assets/menu/3.jpeg') },
   { id: '3', menu: require('../assets/menu/4.jpeg') },
-  { id: '3', menu: require('../assets/menu/1.jpeg') },
-  { id: '3', menu: require('../assets/menu/5.jpeg') },
-  { id: '3', menu: require('../assets/menu/6.jpeg') },
-]; // Ganti dengan URL gambar menu Anda
+  { id: '4', menu: require('../assets/menu/1.jpeg') },
+  { id: '5', menu: require('../assets/menu/5.jpeg') },
+  { id: '6', menu: require('../assets/menu/6.jpeg') },
+];
+
 const HomeScreen = () => {
   const renderItem = ({ item }) => (
     <Image source={item.menu} style={styles.menuImage} key={item.id} />
   );
-  
+
   return (
-    <View style={styles.container}>
-      <Image source={logo} style={styles.logo} />
+    <ScrollView style={styles.container}>
+      <View style={styles.header}>
+        <Image source={logo} style={styles.logo} />
+        <Text style={styles.headerText}>Quality goods, waiting for you to choose!</Text>
+      </View>
 
       <FlatList
         data={menuImages}
@@ -27,6 +31,15 @@ const HomeScreen = () => {
         showsHorizontalScrollIndicator={false}
         style={styles.menuList}
       />
+
+      <View style={styles.explosionSection}>
+        <Text style={styles.explosionTitle}>Explosion today</Text>
+        <View style={styles.explosionList}>
+          {menuImages.map((item) => (
+            <Image key={item.id} source={item.menu} style={styles.explosionImage} />
+          ))}
+        </View>
+      </View>
 
       <TouchableOpacity style={styles.orderButton}>
         <Text style={styles.orderButtonText}>Pesan Sekarang</Text>
@@ -38,66 +51,96 @@ const HomeScreen = () => {
       <View style={styles.socialLinks}>
         <Text style={styles.socialText}>Ikuti kami di:</Text>
         <TouchableOpacity>
-          <Image source={ require ('../assets/fb.png') } style={styles.socialIcon} />
+          <Image source={require('../assets/fb.png')} style={styles.socialIcon} />
         </TouchableOpacity>
         <TouchableOpacity>
-          <Image source={ require ('../assets/ig.png') } style={styles.socialIcon} />
+          <Image source={require('../assets/ig.png')} style={styles.socialIcon} />
         </TouchableOpacity>
         <TouchableOpacity>
-          <Image source={require ('../assets/tw.png') } style={styles.socialIcon} />
+          <Image source={require('../assets/tw.png')} style={styles.socialIcon} />
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    backgroundColor: '#FF6347', // Ubah warna latar belakang sesuai kebutuhan
-    padding: 20,
+    backgroundColor: '#F8F8F8',
   },
-  logo: {
-    width: 130,
-    height: 130,
+  header: {
+    alignItems: 'center',
+    padding: 20,
+    backgroundColor: '#FFF',
     marginBottom: 10,
   },
+  logo: {
+    width: 100,
+    height: 100,
+  },
+  headerText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 10,
+  },
   menuList: {
-    padding:1,
-    flexGrow: 0,
+    paddingHorizontal: 10,
     marginBottom: 20,
   },
   menuImage: {
-    width: 200,
-    height: 200,
+    width: 100,
+    height: 100,
     marginRight: 10,
     borderRadius: 10,
   },
+  explosionSection: {
+    paddingHorizontal: 20,
+    marginBottom: 20,
+  },
+  explosionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  explosionList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  explosionImage: {
+    width: '48%',
+    height: 150,
+    marginBottom: 10,
+    borderRadius: 10,
+  },
   orderButton: {
-    backgroundColor: '#000000',
+    backgroundColor: '#FF6347',
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 5,
+    alignSelf: 'center',
     marginBottom: 20,
   },
   orderButtonText: {
-    color: '#ffffff',
+    color: '#FFFFFF',
     fontSize: 18,
     fontWeight: 'bold',
-    textAlign: 'center',
   },
   infoText: {
-    color: '#000000',
+    color: '#333333',
     fontSize: 16,
+    textAlign: 'center',
     marginBottom: 10,
   },
   socialLinks: {
     flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 20,
   },
   socialText: {
-    color: '#000000',
+    color: '#333333',
     fontSize: 16,
     marginRight: 10,
   },
