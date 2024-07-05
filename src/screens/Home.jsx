@@ -1,74 +1,93 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList, ScrollView, TextInput, Dimensions } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+  ScrollView,
+  TextInput,
+  Dimensions,
+} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 const logo = require('../assets/bakso.png');
 const bannerImages = [
-  { id: '1', banner: require('../assets/banner.jpg') },
-  { id: '2', banner: require('../assets/banner2.jpg') },
-  { id: '3', banner: require('../assets/banner3.jpg') },
-  { id: '4', banner: require('../assets/banner4.jpg') }
+  {id: '1', banner: require('../assets/banner.jpg')},
+  {id: '2', banner: require('../assets/banner2.jpg')},
+  {id: '3', banner: require('../assets/banner3.jpg')},
+  {id: '4', banner: require('../assets/banner4.jpg')},
 ];
 const initialMenuImages = [
-  { id: '1', menu: require('../assets/menu/2.jpeg'), title: "Mie Bakso Jumbo", likes: 10, description: "Delicious jumbo meatball with noodles" },
-  { id: '2', menu: require('../assets/menu/3.jpeg'), title: "Bakso Mercon Level 1", likes: 20, description: "Spicy meatball level 1" },
-  { id: '3', menu: require('../assets/menu/4.jpeg'), title: "Bakso Beranak Telor", likes: 30, description: "Meatball with egg inside" },
-  { id: '4', menu: require('../assets/menu/1.jpeg'), title: "Mie Bakso Hot", likes: 40, description: "Hot and spicy meatball with noodles" },
-  { id: '5', menu: require('../assets/menu/5.jpeg'), title: "Bakso Kikil Udang", likes: 50, description: "Meatball with shrimp" },
-  { id: '6', menu: require('../assets/menu/6.jpeg'), title: "Bakso Krucut", likes: 60, description: "Pointy meatball" },
+  {
+    id: '1',
+    menu: require('../assets/menu/2.jpeg'),
+    title: 'Mie Bakso Jumbo',
+    likes: 10,
+    description: 'Delicious jumbo meatball with noodles',
+  },
+  {
+    id: '2',
+    menu: require('../assets/menu/3.jpeg'),
+    title: 'Bakso Mercon Level 1',
+    likes: 20,
+    description: 'Spicy meatball level 1',
+  },
+  {
+    id: '3',
+    menu: require('../assets/menu/4.jpeg'),
+    title: 'Bakso Beranak Telor',
+    likes: 30,
+    description: 'Meatball with egg inside',
+  },
+  {
+    id: '4',
+    menu: require('../assets/menu/1.jpeg'),
+    title: 'Mie Bakso Hot',
+    likes: 40,
+    description: 'Hot and spicy meatball with noodles',
+  },
+  {
+    id: '5',
+    menu: require('../assets/menu/5.jpeg'),
+    title: 'Bakso Kikil Udang',
+    likes: 50,
+    description: 'Meatball with shrimp',
+  },
+  {
+    id: '6',
+    menu: require('../assets/menu/6.jpeg'),
+    title: 'Bakso Krucut',
+    likes: 60,
+    description: 'Pointy meatball',
+  },
 ];
 
 const categories = [
-  { id: '1', name: 'Populer' },
-  { id: '2', name: 'Bakso' },
-  { id: '3', name: 'Mie Bakso' },
-  { id: '4', name: 'Minuman' },
+  {id: '1', name: 'Vindex Tengker', image: require('../assets/chef1.jpeg')},
+  {id: '2', name: 'Renatta Moeloek', image: require('../assets/chef2.jpeg')},
+  {id: '3', name: 'Juna Rorimpandey', image: require('../assets/chef3.jpeg')},
+  {id: '4', name: 'Juna Rorimpandey', image: require('../assets/chef4.jpeg')},
 ];
 
 const HomeScreen = () => {
   const navigation = useNavigation();
-  const flatListRef = useRef(null);
 
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState('1');
   const [menuImages, setMenuImages] = useState(initialMenuImages);
 
-  // Auto slide every 5 seconds
-  const slideInterval = useRef(null);
-
-  const startAutoSlide = () => {
-    slideInterval.current = setInterval(() => {
-      const nextIndex = (currentBannerIndex + 1) % bannerImages.length;
-      setCurrentBannerIndex(nextIndex);
-      flatListRef.current.scrollToIndex({ index: nextIndex });
-    }, 5000); // Change slide interval here (in milliseconds)
+  const onBannerScroll = event => {
+    const newIndex = Math.floor(event.nativeEvent.contentOffset.x / width);
+    setCurrentBannerIndex(newIndex);
   };
 
-  const stopAutoSlide = () => {
-    if (slideInterval.current) {
-      clearInterval(slideInterval.current);
-    }
-  };
-
-  const onBannerScrollBegin = () => {
-    stopAutoSlide();
-  };
-
-  const onBannerScrollEnd = () => {
-    startAutoSlide();
-  };
-
-  const onBannerScroll = (event) => {
-    const contentOffsetX = event.nativeEvent.contentOffset.x;
-    const index = Math.floor(contentOffsetX / width);
-    setCurrentBannerIndex(index);
-  };
-
-  const handleLikePress = (id) => {
-    const updatedMenuImages = menuImages.map((item) => {
+  const handleLikePress = id => {
+    const updatedMenuImages = menuImages.map(item => {
       if (item.id === id) {
-        return { ...item, likes: item.likes + 1 };
+        return {...item, likes: item.likes + 1};
       }
       return item;
     });
@@ -79,11 +98,11 @@ const HomeScreen = () => {
     navigation.navigate('Chart');
   };
 
-  const renderBannerItem = ({ item, index }) => (
+  const renderBannerItem = ({item}) => (
     <Image source={item.banner} style={styles.bannerImage} key={item.id} />
   );
 
-  const renderMenuItem = ({ item }) => (
+  const renderMenuItem = ({item}) => (
     <View style={styles.menuCard} key={item.id}>
       <Image source={item.menu} style={styles.menuImage} />
       <View style={styles.menuTextContainer}>
@@ -91,10 +110,15 @@ const HomeScreen = () => {
         <Text style={styles.menuDescription}>{item.description}</Text>
         <View style={styles.menuLikeContainer}>
           <TouchableOpacity onPress={() => handleLikePress(item.id)}>
-            <Image source={require('../assets/love.png')} style={styles.likeIcon} />
+            <Image
+              source={require('../assets/love.png')}
+              style={styles.likeIcon}
+            />
           </TouchableOpacity>
           <Text style={styles.menuLikes}>{item.likes}</Text>
-          <TouchableOpacity style={styles.orderButton} onPress={handleOrderNowPress}>
+          <TouchableOpacity
+            style={styles.orderButton}
+            onPress={handleOrderNowPress}>
             <Text style={styles.orderButtonText}>Order Now</Text>
           </TouchableOpacity>
         </View>
@@ -102,7 +126,8 @@ const HomeScreen = () => {
     </View>
   );
 
-  const handleCategoryPress = (categoryId) => {
+  const handleCategoryPress = categoryId => {
+    setSelectedCategory(categoryId);
     switch (categoryId) {
       case '2':
         navigation.navigate('BaksoScreen');
@@ -118,14 +143,16 @@ const HomeScreen = () => {
     }
   };
 
-  const renderCategoryItem = ({ item }) => (
-    <TouchableOpacity 
-      style={[styles.categoryItem, selectedCategory === item.id && styles.selectedCategoryItem]} 
+  const renderCategoryItem = ({item}) => (
+    <TouchableOpacity
+      style={[
+        styles.categoryItem,
+        selectedCategory === item.id && styles.selectedCategoryItem,
+      ]}
       onPress={() => handleCategoryPress(item.id)}
-      key={item.id}
-    >
+      key={item.id}>
+      <Image source={item.image} style={styles.categoryImage} />
       <Text style={styles.categoryText}>{item.name}</Text>
-      {selectedCategory === item.id && <View style={styles.categoryIndicator} />}
     </TouchableOpacity>
   );
 
@@ -142,7 +169,6 @@ const HomeScreen = () => {
 
       <View style={styles.bannerContainer}>
         <FlatList
-          ref={flatListRef}
           data={bannerImages}
           renderItem={renderBannerItem}
           keyExtractor={item => item.id}
@@ -150,14 +176,18 @@ const HomeScreen = () => {
           showsHorizontalScrollIndicator={false}
           pagingEnabled
           onScroll={onBannerScroll}
-          onScrollBeginDrag={onBannerScrollBegin}
-          onScrollEndDrag={onBannerScrollEnd}
           scrollEventThrottle={16}
           style={styles.bannerList}
         />
         <View style={styles.indicatorContainer}>
           {bannerImages.map((_, index) => (
-            <View key={index} style={[styles.indicator, currentBannerIndex === index ? styles.activeIndicator : null]} />
+            <View
+              key={index}
+              style={[
+                styles.indicator,
+                currentBannerIndex === index ? styles.activeIndicator : null,
+              ]}
+            />
           ))}
         </View>
       </View>
@@ -190,13 +220,22 @@ const HomeScreen = () => {
       <View style={styles.socialLinks}>
         <Text style={styles.socialText}>Ikuti kami di:</Text>
         <TouchableOpacity>
-          <Image source={require('../assets/fb.png')} style={styles.socialIcon} />
+          <Image
+            source={require('../assets/fb.png')}
+            style={styles.socialIcon}
+          />
         </TouchableOpacity>
         <TouchableOpacity>
-          <Image source={require('../assets/ig.png')} style={styles.socialIcon} />
+          <Image
+            source={require('../assets/ig.png')}
+            style={styles.socialIcon}
+          />
         </TouchableOpacity>
         <TouchableOpacity>
-          <Image source={require('../assets/tw.png')} style={styles.socialIcon} />
+          <Image
+            source={require('../assets/tw.png')}
+            style={styles.socialIcon}
+          />
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -265,23 +304,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   categoryItem: {
-    padding: 10,
-    marginRight: 10,
     alignItems: 'center',
+    marginRight: 20,
   },
   selectedCategoryItem: {
     borderBottomWidth: 2,
     borderBottomColor: '#FF6347',
   },
-  categoryText: {
-    fontSize: 16,
-    color: '#333',
+  categoryImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginBottom: 5,
   },
-  categoryIndicator: {
-    width: 20,
-    height: 2,
-    backgroundColor: '#FF6347',
-    marginTop: 5,
+  categoryText: {
+    fontSize: 14,
+    color: '#333',
   },
   section: {
     paddingHorizontal: 10,
