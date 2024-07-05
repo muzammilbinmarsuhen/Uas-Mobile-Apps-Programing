@@ -1,21 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList, ScrollView, TextInput, Dimensions } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
+import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 const logo = require('../assets/bakso.png');
 const bannerImages = [
   { id: '1', banner: require('../assets/banner.jpg') },
   { id: '2', banner: require('../assets/banner2.jpg') },
-  { id: '3', banner: require('../assets/banner3.jpg') }
+  { id: '3', banner: require('../assets/banner3.jpg') },
+  { id: '4', banner: require('../assets/banner4.jpg') }
 ];
-const menuImages = [
-  { id: '1', menu: require('../assets/menu/2.jpeg'), title: "How hard is it for humans to climb Mount Everest?", likes: 10 },
-  { id: '2', menu: require('../assets/menu/3.jpeg'), title: "What is used in life to use Newton's first law?", likes: 20 },
-  { id: '3', menu: require('../assets/menu/4.jpeg'), title: "How to learn to get along well with others?", likes: 30 },
-  { id: '4', menu: require('../assets/menu/1.jpeg'), title: "Menu 4", likes: 40 },
-  { id: '5', menu: require('../assets/menu/5.jpeg'), title: "Menu 5", likes: 50 },
-  { id: '6', menu: require('../assets/menu/6.jpeg'), title: "Menu 6", likes: 60 },
+const initialMenuImages = [
+  { id: '1', menu: require('../assets/menu/2.jpeg'), title: "Mie Bakso Jumbo", likes: 10, description: "Delicious jumbo meatball with noodles" },
+  { id: '2', menu: require('../assets/menu/3.jpeg'), title: "Bakso Mercon Level 1", likes: 20, description: "Spicy meatball level 1" },
+  { id: '3', menu: require('../assets/menu/4.jpeg'), title: "Bakso Beranak Telor", likes: 30, description: "Meatball with egg inside" },
+  { id: '4', menu: require('../assets/menu/1.jpeg'), title: "Mie Bakso Hot", likes: 40, description: "Hot and spicy meatball with noodles" },
+  { id: '5', menu: require('../assets/menu/5.jpeg'), title: "Bakso Kikil Udang", likes: 50, description: "Meatball with shrimp" },
+  { id: '6', menu: require('../assets/menu/6.jpeg'), title: "Bakso Krucut", likes: 60, description: "Pointy meatball" },
 ];
 
 const categories = [
@@ -26,17 +27,59 @@ const categories = [
 ];
 
 const HomeScreen = () => {
-  const navigation = useNavigation(); // Initialize navigation
+  const navigation = useNavigation();
+  const flatListRef = useRef(null);
 
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState('1');
+  const [menuImages, setMenuImages] = useState(initialMenuImages);
 
-  const onBannerScroll = (event) => {
-    const newIndex = Math.floor(event.nativeEvent.contentOffset.x / width);
-    setCurrentBannerIndex(newIndex);
+  // Auto slide every 5 seconds
+  const slideInterval = useRef(null);
+
+  const startAutoSlide = () => {
+    slideInterval.current = setInterval(() => {
+      const nextIndex = (currentBannerIndex + 1) % bannerImages.length;
+      setCurrentBannerIndex(nextIndex);
+      flatListRef.current.scrollToIndex({ index: nextIndex });
+    }, 5000); // Change slide interval here (in milliseconds)
   };
 
-  const renderBannerItem = ({ item }) => (
+  const stopAutoSlide = () => {
+    if (slideInterval.current) {
+      clearInterval(slideInterval.current);
+    }
+  };
+
+  const onBannerScrollBegin = () => {
+    stopAutoSlide();
+  };
+
+  const onBannerScrollEnd = () => {
+    startAutoSlide();
+  };
+
+  const onBannerScroll = (event) => {
+    const contentOffsetX = event.nativeEvent.contentOffset.x;
+    const index = Math.floor(contentOffsetX / width);
+    setCurrentBannerIndex(index);
+  };
+
+  const handleLikePress = (id) => {
+    const updatedMenuImages = menuImages.map((item) => {
+      if (item.id === id) {
+        return { ...item, likes: item.likes + 1 };
+      }
+      return item;
+    });
+    setMenuImages(updatedMenuImages);
+  };
+
+  const handleOrderNowPress = () => {
+    navigation.navigate('Chart');
+  };
+
+  const renderBannerItem = ({ item, index }) => (
     <Image source={item.banner} style={styles.bannerImage} key={item.id} />
   );
 
@@ -45,28 +88,32 @@ const HomeScreen = () => {
       <Image source={item.menu} style={styles.menuImage} />
       <View style={styles.menuTextContainer}>
         <Text style={styles.menuTitle}>{item.title}</Text>
+        <Text style={styles.menuDescription}>{item.description}</Text>
         <View style={styles.menuLikeContainer}>
-          <Image source={require('../assets/like.png')} style={styles.likeIcon} />
+          <TouchableOpacity onPress={() => handleLikePress(item.id)}>
+            <Image source={require('../assets/love.png')} style={styles.likeIcon} />
+          </TouchableOpacity>
           <Text style={styles.menuLikes}>{item.likes}</Text>
+          <TouchableOpacity style={styles.orderButton} onPress={handleOrderNowPress}>
+            <Text style={styles.orderButtonText}>Order Now</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
   );
 
   const handleCategoryPress = (categoryId) => {
-    // Navigate to respective category screen based on categoryId
     switch (categoryId) {
       case '2':
-        navigation.navigate('BaksoScreen'); // Navigate to BaksoScreen
+        navigation.navigate('BaksoScreen');
         break;
       case '3':
-        navigation.navigate('MieBaksoScreen'); // Navigate to MieBaksoScreen
+        navigation.navigate('MieBaksoScreen');
         break;
       case '4':
-        navigation.navigate('MinumanScreen'); // Navigate to MinumanScreen
+        navigation.navigate('MinumanScreen');
         break;
       default:
-        // Handle default action
         break;
     }
   };
@@ -95,6 +142,7 @@ const HomeScreen = () => {
 
       <View style={styles.bannerContainer}>
         <FlatList
+          ref={flatListRef}
           data={bannerImages}
           renderItem={renderBannerItem}
           keyExtractor={item => item.id}
@@ -102,6 +150,8 @@ const HomeScreen = () => {
           showsHorizontalScrollIndicator={false}
           pagingEnabled
           onScroll={onBannerScroll}
+          onScrollBeginDrag={onBannerScrollBegin}
+          onScrollEndDrag={onBannerScrollEnd}
           scrollEventThrottle={16}
           style={styles.bannerList}
         />
@@ -124,7 +174,7 @@ const HomeScreen = () => {
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Popular</Text>
+        <Text style={styles.sectionTitle}>Populer</Text>
         <FlatList
           data={menuImages}
           renderItem={renderMenuItem}
@@ -133,10 +183,6 @@ const HomeScreen = () => {
           style={styles.menuList}
         />
       </View>
-
-      <TouchableOpacity style={styles.orderButton}>
-        <Text style={styles.orderButtonText}>Pesan Sekarang</Text>
-      </TouchableOpacity>
 
       <Text style={styles.infoText}>Jam Buka: 10:00 - 22:00</Text>
       <Text style={styles.infoText}>Lokasi: Jl. Contoh No. 123, Jakarta</Text>
@@ -191,7 +237,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   bannerImage: {
-    width: width - 20,
+    width: width - 30,
     height: 150,
     borderRadius: 10,
     marginRight: 10,
@@ -254,23 +300,28 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#FFF',
     borderRadius: 10,
-    padding: 10,
+    padding: 20,
     marginBottom: 10,
     alignItems: 'center',
   },
   menuImage: {
-    width: 60,
-    height: 60,
+    width: 80,
+    height: 80,
     borderRadius: 10,
-    marginRight: 10,
+    marginRight: 20,
   },
   menuTextContainer: {
     flex: 1,
   },
   menuTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
+  },
+  menuDescription: {
+    fontSize: 14,
+    color: '#666',
+    marginTop: 5,
   },
   menuLikeContainer: {
     flexDirection: 'row',
@@ -282,19 +333,21 @@ const styles = StyleSheet.create({
     height: 20,
     marginRight: 5,
   },
-  
+  menuLikes: {
+    fontSize: 14,
+    color: '#333',
+  },
   orderButton: {
     backgroundColor: '#FF6347',
-    paddingVertical: 15,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+    marginLeft: 'auto',
     alignItems: 'center',
-    borderRadius: 10,
-    marginHorizontal: 50,
-    marginBottom: 20,
   },
   orderButtonText: {
     color: '#FFF',
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 14,
   },
   infoText: {
     textAlign: 'center',
