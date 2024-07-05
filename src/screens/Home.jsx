@@ -1,6 +1,7 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList, ScrollView, TextInput } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList, ScrollView, TextInput, Dimensions } from 'react-native';
 
+const { width } = Dimensions.get('window');
 const logo = require('../assets/bakso.png');
 const bannerImages = [
   { id: '1', banner: require('../assets/banner.jpg') }, // Replace with your actual banner image path
@@ -17,6 +18,13 @@ const menuImages = [
 ];
 
 const HomeScreen = () => {
+  const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
+
+  const onBannerScroll = (event) => {
+    const newIndex = Math.floor(event.nativeEvent.contentOffset.x / width);
+    setCurrentBannerIndex(newIndex);
+  };
+
   const renderBannerItem = ({ item }) => (
     <Image source={item.banner} style={styles.bannerImage} key={item.id} />
   );
@@ -44,8 +52,14 @@ const HomeScreen = () => {
           horizontal
           showsHorizontalScrollIndicator={false}
           pagingEnabled
+          onScroll={onBannerScroll}
           style={styles.bannerList}
         />
+        <View style={styles.indicatorContainer}>
+          {bannerImages.map((_, index) => (
+            <View key={index} style={[styles.indicator, currentBannerIndex === index ? styles.activeIndicator : null]} />
+          ))}
+        </View>
       </View>
 
       <View style={styles.section}>
@@ -133,10 +147,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   bannerImage: {
-    width: 300, // Adjust width to fit your design
+    width: width - 40, // Adjust width to fit your design
     height: 150,
     borderRadius: 10,
     marginRight: 10,
+  },
+  indicatorContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 10,
+  },
+  indicator: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: '#ddd',
+    marginHorizontal: 5,
+  },
+  activeIndicator: {
+    backgroundColor: '#FF6347',
   },
   section: {
     paddingHorizontal: 10,
