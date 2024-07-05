@@ -9,15 +9,15 @@ const bannerImages = [
   { id: '3', banner: require('../assets/banner3.jpg') }
 ];
 const menuImages = [
-  { id: '1', menu: require('../assets/menu/2.jpeg'), title: "Menu 1", likes: 10 },
-  { id: '2', menu: require('../assets/menu/3.jpeg'), title: "Menu 2", likes: 20 },
-  { id: '3', menu: require('../assets/menu/4.jpeg'), title: "Menu 3", likes: 30 },
+  { id: '1', menu: require('../assets/menu/2.jpeg'), title: "How hard is it for humans to climb Mount Everest?", likes: 10 },
+  { id: '2', menu: require('../assets/menu/3.jpeg'), title: "What is used in life to use Newton's first law?", likes: 20 },
+  { id: '3', menu: require('../assets/menu/4.jpeg'), title: "How to learn to get along well with others?", likes: 30 },
   { id: '4', menu: require('../assets/menu/1.jpeg'), title: "Menu 4", likes: 40 },
   { id: '5', menu: require('../assets/menu/5.jpeg'), title: "Menu 5", likes: 50 },
   { id: '6', menu: require('../assets/menu/6.jpeg'), title: "Menu 6", likes: 60 },
 ];
 
-const Home = () => {
+const HomeScreen = () => {
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
 
   const onBannerScroll = (event) => {
@@ -149,6 +149,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: 10,
     backgroundColor: '#FFF',
+    color: '#333', // Warna teks di search bar
   },
   bannerContainer: {
     paddingHorizontal: 10,
@@ -158,7 +159,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   bannerImage: {
-    width: width - 5,
+    width: width - 20,
     height: 150,
     borderRadius: 10,
     marginRight: 10,
@@ -186,6 +187,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
+    color: '#333', // Warna teks judul section
   },
   eventCard: {
     backgroundColor: '#FFF',
@@ -202,6 +204,7 @@ const styles = StyleSheet.create({
   },
   eventText: {
     fontSize: 16,
+    color: '#333', // Warna teks event
   },
   menuList: {
     paddingHorizontal: 10,
@@ -226,6 +229,7 @@ const styles = StyleSheet.create({
   menuTitle: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: '#333', // Warna teks judul menu
   },
   menuLikeContainer: {
     flexDirection: 'row',
@@ -239,7 +243,7 @@ const styles = StyleSheet.create({
   },
   menuLikes: {
     fontSize: 14,
-    color: '#888',
+    color: '#888', // Warna teks jumlah suka
   },
   orderButton: {
     backgroundColor: '#FF6347',
@@ -255,7 +259,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   infoText: {
-    color: '#333333',
+    color: '#333333', // Warna teks info
     fontSize: 16,
     textAlign: 'center',
     marginBottom: 10,
@@ -267,7 +271,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   socialText: {
-    color: '#333333',
+    color: '#333333', // Warna teks social text
     fontSize: 16,
     marginRight: 10,
   },
@@ -278,6 +282,5 @@ const styles = StyleSheet.create({
   },
 });
 
+export default HomeScreen;
 
-
-export default Home;
