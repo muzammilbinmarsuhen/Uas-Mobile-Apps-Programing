@@ -78,6 +78,7 @@ const HomeScreen = () => {
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState('1');
   const [menuImages, setMenuImages] = useState(initialMenuImages);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const onBannerScroll = event => {
     const newIndex = Math.floor(event.nativeEvent.contentOffset.x / width);
@@ -98,8 +99,16 @@ const HomeScreen = () => {
     navigation.navigate('Chart');
   };
 
+  const handleSearch = text => {
+    setSearchQuery(text);
+  };
+
+  const filteredMenuImages = menuImages.filter(item =>
+    item.title.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
   const renderBannerItem = ({item}) => (
-    <Image source={item.banner} style={styles.bannerImage} key={item.id} />
+    <Image source={item.banner} style={styles.bannerImage} />
   );
 
   const renderMenuItem = ({item}) => (
@@ -128,19 +137,6 @@ const HomeScreen = () => {
 
   const handleCategoryPress = categoryId => {
     setSelectedCategory(categoryId);
-    // switch (categoryId) {
-    //   case '2':
-    //     navigation.navigate('BaksoScreen');
-    //     break;
-    //   case '3':
-    //     navigation.navigate('MieBaksoScreen');
-    //     break;
-    //   case '4':
-    //     navigation.navigate('MinumanScreen');
-    //     break;
-    //   default:
-    //     break;
-    // }
   };
 
   const renderCategoryItem = ({item}) => (
@@ -164,6 +160,8 @@ const HomeScreen = () => {
           style={styles.searchBar}
           placeholder="Search"
           placeholderTextColor="#888"
+          onChangeText={handleSearch}
+          value={searchQuery}
         />
       </View>
 
@@ -206,7 +204,7 @@ const HomeScreen = () => {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Populer</Text>
         <FlatList
-          data={menuImages}
+          data={filteredMenuImages}
           renderItem={renderMenuItem}
           keyExtractor={item => item.id}
           showsVerticalScrollIndicator={false}
