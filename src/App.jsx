@@ -4,6 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Splash from './screens/Splash';
 import Home from './screens/Home';
 import Menu from './screens/Menu';
 import Cart from './screens/Cart';
@@ -69,6 +70,11 @@ function App() {
     <CartProvider>
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen
+            name="Splash"
+            component={Splash}
+            options={{headerShown: false}}
+          />
           <Stack.Screen
             name="Tab"
             component={MenuTab}
