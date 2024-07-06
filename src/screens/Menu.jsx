@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -45,9 +45,166 @@ const baksoItems = [
     image: require('../assets/menu/4.jpeg'),
     delivery: 'Standard Delivery (Tomorrow evening)',
   },
-]; // Replace with actual image paths
+  {
+    id: '5',
+    name: 'Bakso Urat',
+    weight: '100gm',
+    oldPrice: 'Rp 28.000',
+    newPrice: 'Rp 23.000',
+    image: require('../assets/menu/5.jpeg'),
+    delivery: 'Standard Delivery (Tomorrow evening)',
+  },
+  {
+    id: '6',
+    name: 'Bakso Urat',
+    weight: '100gm',
+    oldPrice: 'Rp 28.000',
+    newPrice: 'Rp 23.000',
+    image: require('../assets/menu/6.jpeg'),
+    delivery: 'Standard Delivery (Tomorrow evening)',
+  },
+  {
+    id: '7',
+    name: 'Bakso Urat',
+    weight: '100gm',
+    oldPrice: 'Rp 28.000',
+    newPrice: 'Rp 23.000',
+    image: require('../assets/menu/7.jpeg'),
+    delivery: 'Standard Delivery (Tomorrow evening)',
+  },
+  {
+    id: '8',
+    name: 'Bakso Urat',
+    weight: '100gm',
+    oldPrice: 'Rp 28.000',
+    newPrice: 'Rp 23.000',
+    image: require('../assets/menu/8.jpeg'),
+    delivery: 'Standard Delivery (Tomorrow evening)',
+  },
+  {
+    id: '9',
+    name: 'Bakso Urat',
+    weight: '100gm',
+    oldPrice: 'Rp 28.000',
+    newPrice: 'Rp 23.000',
+    image: require('../assets/menu/9.jpeg'),
+    delivery: 'Standard Delivery (Tomorrow evening)',
+  },
+  {
+    id: '10',
+    name: 'Bakso Urat',
+    weight: '100gm',
+    oldPrice: 'Rp 28.000',
+    newPrice: 'Rp 23.000',
+    image: require('../assets/menu/10.jpeg'),
+    delivery: 'Standard Delivery (Tomorrow evening)',
+  },
+  {
+    id: '11',
+    name: 'Bakso Urat',
+    weight: '100gm',
+    oldPrice: 'Rp 28.000',
+    newPrice: 'Rp 23.000',
+    image: require('../assets/menu/11.jpeg'),
+    delivery: 'Standard Delivery (Tomorrow evening)',
+  },
+  {
+    id: '12',
+    name: 'Bakso Urat',
+    weight: '100gm',
+    oldPrice: 'Rp 28.000',
+    newPrice: 'Rp 23.000',
+    image: require('../assets/menu/12.jpeg'),
+    delivery: 'Standard Delivery (Tomorrow evening)',
+  },
+  {
+    id: '13',
+    name: 'Bakso Urat',
+    weight: '100gm',
+    oldPrice: 'Rp 28.000',
+    newPrice: 'Rp 23.000',
+    image: require('../assets/menu/13.jpeg'),
+    delivery: 'Standard Delivery (Tomorrow evening)',
+  },
+  {
+    id: '14',
+    name: 'Bakso Urat',
+    weight: '100gm',
+    oldPrice: 'Rp 28.000',
+    newPrice: 'Rp 23.000',
+    image: require('../assets/menu/14.jpeg'),
+    delivery: 'Standard Delivery (Tomorrow evening)',
+  },
+  {
+    id: '15',
+    name: 'Bakso Urat',
+    weight: '100gm',
+    oldPrice: 'Rp 28.000',
+    newPrice: 'Rp 23.000',
+    image: require('../assets/menu/15.jpeg'),
+    delivery: 'Standard Delivery (Tomorrow evening)',
+  },
+  {
+    id: '16',
+    name: 'Bakso Urat',
+    weight: '100gm',
+    oldPrice: 'Rp 28.000',
+    newPrice: 'Rp 23.000',
+    image: require('../assets/menu/16.jpeg'),
+    delivery: 'Standard Delivery (Tomorrow evening)',
+  },
+  {
+    id: '17',
+    name: 'Bakso Urat',
+    weight: '100gm',
+    oldPrice: 'Rp 28.000',
+    newPrice: 'Rp 23.000',
+    image: require('../assets/menu/17.jpeg'),
+    delivery: 'Standard Delivery (Tomorrow evening)',
+  },
+  {
+    id: '18',
+    name: 'Bakso Urat',
+    weight: '100gm',
+    oldPrice: 'Rp 28.000',
+    newPrice: 'Rp 23.000',
+    image: require('../assets/menu/18.jpeg'),
+    delivery: 'Standard Delivery (Tomorrow evening)',
+  },
+  {
+    id: '19',
+    name: 'Bakso Urat',
+    weight: '100gm',
+    oldPrice: 'Rp 28.000',
+    newPrice: 'Rp 23.000',
+    image: require('../assets/menu/19.jpeg'),
+    delivery: 'Standard Delivery (Tomorrow evening)',
+  },
+  {
+    id: '20',
+    name: 'Bakso Urat',
+    weight: '100gm',
+    oldPrice: 'Rp 28.000',
+    newPrice: 'Rp 23.000',
+    image: require('../assets/menu/20.jpeg'),
+    delivery: 'Standard Delivery (Tomorrow evening)',
+  },
+  {
+    id: '21',
+    name: 'Bakso Urat',
+    weight: '100gm',
+    oldPrice: 'Rp 28.000',
+    newPrice: 'Rp 23.000',
+    image: require('../assets/menu/21.jpeg'),
+    delivery: 'Standard Delivery (Tomorrow evening)',
+  },
+];
 
 const MenuScreen = () => {
+  const [selectedCategory, setSelectedCategory] = useState('All');
+
+  const categories = ['All', 'Breakfast', 'Lunch', 'Treats', 'Dessert'];
+
   const renderBaksoItem = ({item}) => (
     <View style={styles.productItem} key={item.id}>
       <Image source={item.image} style={styles.productImage} />
@@ -73,9 +230,22 @@ const MenuScreen = () => {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.categoryList} horizontal>
-        {['All', 'Breakfast', 'Lunch', 'Treats', 'Dessert'].map(category => (
-          <TouchableOpacity key={category} style={styles.categoryButton}>
-            <Text style={styles.categoryButtonText}>{category}</Text>
+        {categories.map(category => (
+          <TouchableOpacity
+            key={category}
+            style={[
+              styles.categoryButton,
+              selectedCategory === category && styles.selectedCategoryButton,
+            ]}
+            onPress={() => setSelectedCategory(category)}>
+            <Text
+              style={[
+                styles.categoryButtonText,
+                selectedCategory === category &&
+                  styles.selectedCategoryButtonText,
+              ]}>
+              {category}
+            </Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -108,8 +278,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ddd',
   },
+  selectedCategoryButton: {
+    borderBottomWidth: 2,
+    borderBottomColor: '#FF6347',
+  },
   categoryButtonText: {
     color: '#333',
+  },
+  selectedCategoryButtonText: {
+    color: '#FF6347',
   },
   productList: {
     paddingBottom: 10,
