@@ -1,5 +1,5 @@
 // CartScreen.js
-import React, { useContext } from 'react';
+import React, {useContext} from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import { CartContext } from './CartContext';
+import {useNavigation} from '@react-navigation/native';
+import {CartContext} from './CartContext';
 
 const CartScreen = () => {
   const {
@@ -19,7 +20,9 @@ const CartScreen = () => {
     calculateTotal,
   } = useContext(CartContext);
 
-  const renderItem = ({ item }) => (
+  const navigation = useNavigation();
+
+  const renderItem = ({item}) => (
     <View style={styles.cartItem}>
       <Image source={item.image} style={styles.cartItemImage} />
       <View style={styles.cartItemInfo}>
@@ -30,21 +33,18 @@ const CartScreen = () => {
         <View style={styles.cartItemControls}>
           <TouchableOpacity
             style={styles.cartItemButton}
-            onPress={() => decrementQuantity(item.id)}
-          >
+            onPress={() => decrementQuantity(item.id)}>
             <Text style={styles.cartItemButtonText}>-</Text>
           </TouchableOpacity>
           <Text style={styles.cartItemQuantity}>{item.quantity}</Text>
           <TouchableOpacity
             style={styles.cartItemButton}
-            onPress={() => incrementQuantity(item.id)}
-          >
+            onPress={() => incrementQuantity(item.id)}>
             <Text style={styles.cartItemButtonText}>+</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.removeItemButton}
-            onPress={() => removeItem(item.id)}
-          >
+            onPress={() => removeItem(item.id)}>
             <Text style={styles.removeItemButtonText}>Hapus</Text>
           </TouchableOpacity>
         </View>
@@ -52,19 +52,26 @@ const CartScreen = () => {
     </View>
   );
 
+  const handleCheckout = () => {
+    // Navigasi ke halaman Checkout
+    navigation.navigate('Checkout'); // Ganti 'Checkout' dengan nama stack navigator atau screen yang sesuai
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
         data={cartItems}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()} // Ubah agar keyExtractor menggunakan string
+        keyExtractor={item => item.id.toString()} // Ubah agar keyExtractor menggunakan string
         style={styles.cartList}
       />
       <View style={styles.cartSummary}>
         <Text style={styles.cartTotalText}>
           Total: Rp {calculateTotal() ? calculateTotal().toLocaleString() : '0'}
         </Text>
-        <TouchableOpacity style={styles.checkoutButton}>
+        <TouchableOpacity
+          style={styles.checkoutButton}
+          onPress={handleCheckout}>
           <Text style={styles.checkoutButtonText}>Checkout</Text>
         </TouchableOpacity>
       </View>
@@ -89,10 +96,11 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: '#eee',
+    alignItems: 'center',
   },
   cartItemImage: {
-    width: 80,
-    height: 80,
+    width: 90,
+    height: 90,
   },
   cartItemInfo: {
     flex: 1,
@@ -101,6 +109,7 @@ const styles = StyleSheet.create({
   cartItemName: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: '#000',
   },
   cartItemPrice: {
     fontSize: 16,

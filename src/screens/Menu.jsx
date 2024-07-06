@@ -20,6 +20,7 @@ const initialBaksoItems = [
     newPrice: 'Rp 20.000',
     image: require('../assets/menu/1.jpeg'),
     delivery: 'Standard Delivery (Tomorrow evening)',
+    category: 'Lunch',
   },
   {
     id: '2',
@@ -29,6 +30,7 @@ const initialBaksoItems = [
     newPrice: 'Rp 25.000',
     image: require('../assets/menu/2.jpeg'),
     delivery: 'Express Delivery (Tomorrow morning)',
+    category: 'Lunch',
   },
   {
     id: '3',
@@ -37,6 +39,7 @@ const initialBaksoItems = [
     price: 'Rp 22.000',
     image: require('../assets/menu/3.jpeg'),
     delivery: 'Express Delivery (Tomorrow morning)',
+    category: 'Lunch',
   },
   {
     id: '4',
@@ -46,6 +49,7 @@ const initialBaksoItems = [
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/4.jpeg'),
     delivery: 'Standard Delivery (Tomorrow evening)',
+    category: 'Lunch',
   },
   {
     id: '5',
@@ -55,6 +59,7 @@ const initialBaksoItems = [
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/5.jpeg'),
     delivery: 'Standard Delivery (Tomorrow evening)',
+    category: 'Lunch',
   },
   {
     id: '6',
@@ -64,6 +69,7 @@ const initialBaksoItems = [
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/6.jpeg'),
     delivery: 'Standard Delivery (Tomorrow evening)',
+    category: 'Lunch',
   },
   {
     id: '7',
@@ -73,6 +79,7 @@ const initialBaksoItems = [
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/7.jpeg'),
     delivery: 'Standard Delivery (Tomorrow evening)',
+    category: 'Lunch',
   },
   {
     id: '8',
@@ -82,6 +89,7 @@ const initialBaksoItems = [
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/8.jpeg'),
     delivery: 'Standard Delivery (Tomorrow evening)',
+    category: 'Lunch',
   },
   {
     id: '9',
@@ -91,6 +99,7 @@ const initialBaksoItems = [
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/9.jpeg'),
     delivery: 'Standard Delivery (Tomorrow evening)',
+    category: 'Lunch',
   },
   {
     id: '10',
@@ -100,6 +109,7 @@ const initialBaksoItems = [
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/10.jpeg'),
     delivery: 'Standard Delivery (Tomorrow evening)',
+    category: 'Lunch',
   },
   {
     id: '11',
@@ -109,6 +119,7 @@ const initialBaksoItems = [
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/11.jpeg'),
     delivery: 'Standard Delivery (Tomorrow evening)',
+    category: 'Lunch',
   },
   {
     id: '12',
@@ -118,6 +129,7 @@ const initialBaksoItems = [
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/12.jpeg'),
     delivery: 'Standard Delivery (Tomorrow evening)',
+    category: 'Lunch',
   },
   {
     id: '13',
@@ -127,6 +139,7 @@ const initialBaksoItems = [
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/13.jpeg'),
     delivery: 'Standard Delivery (Tomorrow evening)',
+    category: 'Lunch',
   },
   {
     id: '14',
@@ -136,6 +149,7 @@ const initialBaksoItems = [
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/14.jpeg'),
     delivery: 'Standard Delivery (Tomorrow evening)',
+    category: 'Lunch',
   },
   {
     id: '15',
@@ -145,6 +159,7 @@ const initialBaksoItems = [
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/15.jpeg'),
     delivery: 'Standard Delivery (Tomorrow evening)',
+    category: 'Lunch',
   },
   {
     id: '16',
@@ -154,6 +169,7 @@ const initialBaksoItems = [
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/16.jpeg'),
     delivery: 'Standard Delivery (Tomorrow evening)',
+    category: 'Lunch',
   },
   {
     id: '17',
@@ -163,6 +179,7 @@ const initialBaksoItems = [
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/17.jpeg'),
     delivery: 'Standard Delivery (Tomorrow evening)',
+    category: 'Lunch',
   },
   {
     id: '18',
@@ -172,6 +189,7 @@ const initialBaksoItems = [
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/18.jpeg'),
     delivery: 'Standard Delivery (Tomorrow evening)',
+    category: 'Lunch',
   },
   {
     id: '19',
@@ -181,6 +199,7 @@ const initialBaksoItems = [
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/19.jpeg'),
     delivery: 'Standard Delivery (Tomorrow evening)',
+    category: 'Lunch',
   },
   {
     id: '20',
@@ -190,6 +209,7 @@ const initialBaksoItems = [
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/20.jpeg'),
     delivery: 'Standard Delivery (Tomorrow evening)',
+    category: 'Lunch',
   },
   {
     id: '21',
@@ -199,6 +219,7 @@ const initialBaksoItems = [
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/21.jpeg'),
     delivery: 'Standard Delivery (Tomorrow evening)',
+    category: 'Lunch',
   },
 ];
 
@@ -248,7 +269,7 @@ const MenuScreen = () => {
         {renderStars(item.rating, item.id)}
         <View style={styles.productPriceContainer}>
           {item.oldPrice && (
-            <Text style={styles.productOldPrice}> {item.oldPrice}</Text>
+            <Text style={styles.productOldPrice}>{item.oldPrice}</Text>
           )}
           <Text style={styles.productNewPrice}>
             {item.newPrice || item.price}
@@ -352,6 +373,7 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 14,
     fontWeight: 'bold',
+    color: '#000',
   },
   starContainer: {
     flexDirection: 'row',
