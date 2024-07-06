@@ -1,65 +1,91 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+  ScrollView,
+} from 'react-native';
 
-const categories = [
-  { id: '1', name: 'Bakso' },
-  { id: '2', name: 'Mie' },
-  { id: '3', name: 'Minuman' },
-];
-
-const menuItems = [
-  { id: '1', category: 'Bakso', name: 'Bakso Sapi', description: 'Bakso sapi dengan kuah gurih', price: 'Rp 15.000', image: 'https://link-to-bakso-sapi.png' },
-  { id: '2', category: 'Mie', name: 'Mie Ayam', description: 'Mie ayam dengan topping ayam', price: 'Rp 20.000', image: 'https://link-to-mie-ayam.png' },
-  { id: '3', category: 'Minuman', name: 'Es Teh', description: 'Es teh manis segar', price: 'Rp 5.000', image: 'https://link-to-es-teh.png' },
-]; // Ganti dengan URL gambar dan deskripsi menu Anda
+const baksoItems = [
+  {
+    id: '1',
+    name: 'Bakso Sapi',
+    weight: '500gm',
+    oldPrice: 'Rp 25.000',
+    newPrice: 'Rp 20.000',
+    image: require('../assets/menu/1.jpeg'),
+    delivery: 'Standard Delivery (Tomorrow evening)',
+  },
+  {
+    id: '2',
+    name: 'Bakso Ayam',
+    weight: '1kg',
+    oldPrice: 'Rp 30.000',
+    newPrice: 'Rp 25.000',
+    image: require('../assets/menu/2.jpeg'),
+    delivery: 'Express Delivery (Tomorrow morning)',
+  },
+  {
+    id: '3',
+    name: 'Bakso Ikan',
+    weight: '500gm',
+    price: 'Rp 22.000',
+    image: require('../assets/menu/3.jpeg'),
+    delivery: 'Express Delivery (Tomorrow morning)',
+  },
+  {
+    id: '4',
+    name: 'Bakso Urat',
+    weight: '100gm',
+    oldPrice: 'Rp 28.000',
+    newPrice: 'Rp 23.000',
+    image: require('../assets/menu/4.jpeg'),
+    delivery: 'Standard Delivery (Tomorrow evening)',
+  },
+]; // Replace with actual image paths
 
 const MenuScreen = () => {
-  const [selectedCategory, setSelectedCategory] = React.useState('Bakso');
-
-  const renderCategory = ({ item }) => (
-    <TouchableOpacity 
-      style={[styles.categoryButton, selectedCategory === item.name && styles.categoryButtonSelected]} 
-      onPress={() => setSelectedCategory(item.name)}
-    >
-      <Text style={styles.categoryButtonText}>{item.name}</Text>
-    </TouchableOpacity>
-  );
-
-  const renderItem = ({ item }) => {
-    if (item.category === selectedCategory) {
-      return (
-        <View style={styles.menuItem} key={item.id}>
-          <Image source={{ uri: item.image }} style={styles.menuImage} />
-          <View style={styles.menuInfo}>
-            <Text style={styles.menuName}>{item.name}</Text>
-            <Text style={styles.menuDescription}>{item.description}</Text>
-            <Text style={styles.menuPrice}>{item.price}</Text>
-            <TouchableOpacity style={styles.addButton}>
-              <Text style={styles.addButtonText}>Tambah ke Keranjang</Text>
-            </TouchableOpacity>
-          </View>
+  const renderBaksoItem = ({item}) => (
+    <View style={styles.productItem} key={item.id}>
+      <Image source={item.image} style={styles.productImage} />
+      <View style={styles.productInfo}>
+        <Text style={styles.productName}>{item.name}</Text>
+        <Text style={styles.productWeight}>{item.weight}</Text>
+        <View style={styles.productPriceContainer}>
+          {item.oldPrice && (
+            <Text style={styles.productOldPrice}>{item.oldPrice}</Text>
+          )}
+          <Text style={styles.productNewPrice}>
+            {item.newPrice || item.price}
+          </Text>
         </View>
-      );
-    }
-    return null;
-  };
+        <Text style={styles.productDelivery}>{item.delivery}</Text>
+        <TouchableOpacity style={styles.addButton}>
+          <Text style={styles.addButtonText}>Add to cart</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={categories}
-        renderItem={renderCategory}
-        keyExtractor={item => item.id}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.categoryList}
-      />
-      <ScrollView style={styles.menuList}>
-        {menuItems.filter(item => item.category === selectedCategory).map(item => renderItem({ item }))}
+      <ScrollView style={styles.categoryList} horizontal>
+        {['All', 'Breakfast', 'Lunch', 'Treats', 'Dessert'].map(category => (
+          <TouchableOpacity key={category} style={styles.categoryButton}>
+            <Text style={styles.categoryButtonText}>{category}</Text>
+          </TouchableOpacity>
+        ))}
       </ScrollView>
-      <TouchableOpacity style={styles.orderButton}>
-        <Text style={styles.orderButtonText}>Pesan Sekarang</Text>
-      </TouchableOpacity>
+      <FlatList
+        data={baksoItems}
+        renderItem={renderBaksoItem}
+        keyExtractor={item => item.id}
+        numColumns={2}
+        contentContainerStyle={styles.productList}
+      />
     </View>
   );
 };
@@ -67,61 +93,68 @@ const MenuScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#F6F6F6',
+    padding: 15,
   },
   categoryList: {
-    backgroundColor: '#f8f8f8',
-    paddingVertical: 10,
+    flexDirection: 'row',
+    marginBottom: 10,
   },
   categoryButton: {
     backgroundColor: '#fff',
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    marginHorizontal: 5,
+    padding: 10,
     borderRadius: 20,
+    marginHorizontal: 5,
     borderWidth: 1,
     borderColor: '#ddd',
   },
-  categoryButtonSelected: {
-    backgroundColor: '#FF6347',
-    borderColor: '#FF6347',
-  },
   categoryButtonText: {
-    color: '#000',
+    color: '#333',
   },
-  menuList: {
-    paddingHorizontal: 10,
-    marginBottom: 60, // Space for the "Pesan Sekarang" button
+  productList: {
+    paddingBottom: 10,
   },
-  menuItem: {
-    flexDirection: 'row',
+  productItem: {
+    flex: 1,
     backgroundColor: '#fff',
     borderRadius: 10,
-    marginVertical: 10,
+    margin: 10,
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: '#eee',
-  },
-  menuImage: {
-    width: 100,
-    height: 100,
-  },
-  menuInfo: {
-    flex: 1,
     padding: 10,
+    maxWidth: '45%',
   },
-  menuName: {
-    fontSize: 18,
+  productImage: {
+    width: '100%',
+    height: 100,
+    borderRadius: 10,
+  },
+  productInfo: {
+    marginTop: 10,
+  },
+  productName: {
+    fontSize: 14,
     fontWeight: 'bold',
   },
-  menuDescription: {
-    fontSize: 14,
+  productWeight: {
+    fontSize: 12,
     color: '#777',
   },
-  menuPrice: {
-    fontSize: 16,
-    color: '#FF6347',
+  productPriceContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginVertical: 5,
+  },
+  productOldPrice: {
+    fontSize: 12,
+    color: '#777',
+    textDecorationLine: 'line-through',
+    marginRight: 5,
+  },
+  productNewPrice: {
+    fontSize: 14,
+    color: '#FF6347',
   },
   addButton: {
     backgroundColor: '#FF6347',
@@ -129,25 +162,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 5,
     alignSelf: 'flex-start',
+    marginTop: 10,
   },
   addButtonText: {
     color: '#fff',
-    fontSize: 14,
+    fontSize: 12,
   },
-  orderButton: {
-    position: 'absolute',
-    bottom: 10,
-    left: 10,
-    right: 10,
-    backgroundColor: '#FF6347',
-    paddingVertical: 15,
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-  orderButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
+  productDelivery: {
+    fontSize: 10,
+    color: '#777',
   },
 });
 
