@@ -8,12 +8,12 @@ import {
   FlatList,
   ScrollView,
 } from 'react-native';
-
-const baksoItems = [
+import {useNavigation} from '@react-navigation/native';
+const initialBaksoItems = [
   {
     id: '1',
     name: 'Bakso Sapi',
-    weight: '500gm',
+    rating: 4,
     oldPrice: 'Rp 25.000',
     newPrice: 'Rp 20.000',
     image: require('../assets/menu/1.jpeg'),
@@ -22,7 +22,7 @@ const baksoItems = [
   {
     id: '2',
     name: 'Bakso Ayam',
-    weight: '1kg',
+    rating: 5,
     oldPrice: 'Rp 30.000',
     newPrice: 'Rp 25.000',
     image: require('../assets/menu/2.jpeg'),
@@ -31,7 +31,7 @@ const baksoItems = [
   {
     id: '3',
     name: 'Bakso Ikan',
-    weight: '500gm',
+    rating: 3,
     price: 'Rp 22.000',
     image: require('../assets/menu/3.jpeg'),
     delivery: 'Express Delivery (Tomorrow morning)',
@@ -39,7 +39,7 @@ const baksoItems = [
   {
     id: '4',
     name: 'Bakso Urat',
-    weight: '100gm',
+    rating: 4,
     oldPrice: 'Rp 28.000',
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/4.jpeg'),
@@ -48,7 +48,7 @@ const baksoItems = [
   {
     id: '5',
     name: 'Bakso Urat',
-    weight: '100gm',
+    rating: 3,
     oldPrice: 'Rp 28.000',
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/5.jpeg'),
@@ -57,7 +57,7 @@ const baksoItems = [
   {
     id: '6',
     name: 'Bakso Urat',
-    weight: '100gm',
+    rating: 3,
     oldPrice: 'Rp 28.000',
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/6.jpeg'),
@@ -66,7 +66,7 @@ const baksoItems = [
   {
     id: '7',
     name: 'Bakso Urat',
-    weight: '100gm',
+    rating: 3,
     oldPrice: 'Rp 28.000',
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/7.jpeg'),
@@ -75,7 +75,7 @@ const baksoItems = [
   {
     id: '8',
     name: 'Bakso Urat',
-    weight: '100gm',
+    rating: 3,
     oldPrice: 'Rp 28.000',
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/8.jpeg'),
@@ -84,7 +84,7 @@ const baksoItems = [
   {
     id: '9',
     name: 'Bakso Urat',
-    weight: '100gm',
+    rating: 3,
     oldPrice: 'Rp 28.000',
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/9.jpeg'),
@@ -93,7 +93,7 @@ const baksoItems = [
   {
     id: '10',
     name: 'Bakso Urat',
-    weight: '100gm',
+    rating: 3,
     oldPrice: 'Rp 28.000',
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/10.jpeg'),
@@ -102,7 +102,7 @@ const baksoItems = [
   {
     id: '11',
     name: 'Bakso Urat',
-    weight: '100gm',
+    rating: 3,
     oldPrice: 'Rp 28.000',
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/11.jpeg'),
@@ -111,7 +111,7 @@ const baksoItems = [
   {
     id: '12',
     name: 'Bakso Urat',
-    weight: '100gm',
+    rating: 3,
     oldPrice: 'Rp 28.000',
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/12.jpeg'),
@@ -120,7 +120,7 @@ const baksoItems = [
   {
     id: '13',
     name: 'Bakso Urat',
-    weight: '100gm',
+    rating: 3,
     oldPrice: 'Rp 28.000',
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/13.jpeg'),
@@ -129,7 +129,7 @@ const baksoItems = [
   {
     id: '14',
     name: 'Bakso Urat',
-    weight: '100gm',
+    rating: 3,
     oldPrice: 'Rp 28.000',
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/14.jpeg'),
@@ -138,7 +138,7 @@ const baksoItems = [
   {
     id: '15',
     name: 'Bakso Urat',
-    weight: '100gm',
+    rating: 3,
     oldPrice: 'Rp 28.000',
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/15.jpeg'),
@@ -147,7 +147,7 @@ const baksoItems = [
   {
     id: '16',
     name: 'Bakso Urat',
-    weight: '100gm',
+    rating: 3,
     oldPrice: 'Rp 28.000',
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/16.jpeg'),
@@ -156,7 +156,7 @@ const baksoItems = [
   {
     id: '17',
     name: 'Bakso Urat',
-    weight: '100gm',
+    rating: 3,
     oldPrice: 'Rp 28.000',
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/17.jpeg'),
@@ -165,7 +165,7 @@ const baksoItems = [
   {
     id: '18',
     name: 'Bakso Urat',
-    weight: '100gm',
+    rating: 3,
     oldPrice: 'Rp 28.000',
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/18.jpeg'),
@@ -174,7 +174,7 @@ const baksoItems = [
   {
     id: '19',
     name: 'Bakso Urat',
-    weight: '100gm',
+    rating: 3,
     oldPrice: 'Rp 28.000',
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/19.jpeg'),
@@ -183,7 +183,7 @@ const baksoItems = [
   {
     id: '20',
     name: 'Bakso Urat',
-    weight: '100gm',
+    rating: 3,
     oldPrice: 'Rp 28.000',
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/20.jpeg'),
@@ -192,7 +192,7 @@ const baksoItems = [
   {
     id: '21',
     name: 'Bakso Urat',
-    weight: '100gm',
+    rating: 3,
     oldPrice: 'Rp 28.000',
     newPrice: 'Rp 23.000',
     image: require('../assets/menu/21.jpeg'),
@@ -202,15 +202,40 @@ const baksoItems = [
 
 const MenuScreen = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [baksoItems, setBaksoItems] = useState(initialBaksoItems);
+  const navigation = useNavigation();
 
   const categories = ['All', 'Breakfast', 'Lunch', 'Treats', 'Dessert'];
 
-  const renderBaksoItem = ({item}) => (
+  const handleStarPress = id => {
+    setBaksoItems(prevItems =>
+      prevItems.map(item =>
+        item.id === id ? {...item, rating: Math.min(item.rating + 1, 5)} : item,
+      ),
+    );
+  };
+
+  const renderStars = (rating, id) => {
+    const stars = [];
+    for (let i = 0; i < 5; i++) {
+      stars.push(
+        <TouchableOpacity key={i} onPress={() => handleStarPress(id)}>
+          <Text style={styles.star}>{i < rating ? '★' : '☆'}</Text>
+        </TouchableOpacity>,
+      );
+    }
+    return <View style={styles.starContainer}>{stars}</View>;
+  };
+  const handleAddToCart = item => {
+    // Add item to cart logic here
+    navigation.navigate('Cart', {item});
+  };
+  const renderBaksoItem = ({ item }) => (
     <View style={styles.productItem} key={item.id}>
       <Image source={item.image} style={styles.productImage} />
       <View style={styles.productInfo}>
         <Text style={styles.productName}>{item.name}</Text>
-        <Text style={styles.productWeight}>{item.weight}</Text>
+        {renderStars(item.rating, item.id)}
         <View style={styles.productPriceContainer}>
           {item.oldPrice && (
             <Text style={styles.productOldPrice}>{item.oldPrice}</Text>
@@ -220,7 +245,10 @@ const MenuScreen = () => {
           </Text>
         </View>
         <Text style={styles.productDelivery}>{item.delivery}</Text>
-        <TouchableOpacity style={styles.addButton}>
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => handleAddToCart(item)}
+        >
           <Text style={styles.addButtonText}>Add to cart</Text>
         </TouchableOpacity>
       </View>
@@ -237,13 +265,14 @@ const MenuScreen = () => {
               styles.categoryButton,
               selectedCategory === category && styles.selectedCategoryButton,
             ]}
-            onPress={() => setSelectedCategory(category)}>
+            onPress={() => setSelectedCategory(category)}
+          >
             <Text
               style={[
                 styles.categoryButtonText,
-                selectedCategory === category &&
-                  styles.selectedCategoryButtonText,
-              ]}>
+                selectedCategory === category && styles.selectedCategoryButtonText,
+              ]}
+            >
               {category}
             </Text>
           </TouchableOpacity>
@@ -295,28 +324,32 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     borderRadius: 10,
-    margin: 10,
+    margin: 6, // decreased margin to reduce size
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: '#eee',
-    padding: 10,
-    maxWidth: '45%',
+    padding: 8, // decreased padding to reduce size
+    maxWidth: '48%', // reduced width
   },
   productImage: {
     width: '100%',
-    height: 100,
+    height: 130, // decreased image size
     borderRadius: 10,
   },
   productInfo: {
-    marginTop: 10,
+    marginTop: 8, // decreased margin to reduce size
   },
   productName: {
     fontSize: 14,
     fontWeight: 'bold',
   },
-  productWeight: {
-    fontSize: 12,
-    color: '#777',
+  starContainer: {
+    flexDirection: 'row',
+    marginVertical: 5,
+  },
+  star: {
+    fontSize: 14,
+    color: '#FFD700',
   },
   productPriceContainer: {
     flexDirection: 'row',
