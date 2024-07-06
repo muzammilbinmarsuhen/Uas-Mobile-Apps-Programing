@@ -8,13 +8,14 @@ import Home from './screens/Home';
 import Menu from './screens/Menu';
 import Cart from './screens/Cart';
 import Checkout from './screens/Checkout';
+import {CartProvider} from './screens/CartContext';
 
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
 
 const MenuTab = () => {
   return (
-    <Tabs.Navigator screenOptions={{tabBarActiveTintColor: '#eddcd2'}}>
+    <Tabs.Navigator screenOptions={{tabBarActiveTintColor: '#FF6347'}}>
       <Tabs.Screen
         name="Home"
         component={Home}
@@ -65,15 +66,17 @@ const MenuTab = () => {
 
 function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Tab"
-          component={MenuTab}
-          options={{headerShown: false}}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <CartProvider>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Tab"
+            component={MenuTab}
+            options={{headerShown: false}}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </CartProvider>
   );
 }
 

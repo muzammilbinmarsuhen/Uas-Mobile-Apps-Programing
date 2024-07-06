@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,8 @@ import {
   ScrollView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {CartContext} from './CartContext';
+
 const initialBaksoItems = [
   {
     id: '1',
@@ -200,12 +202,13 @@ const initialBaksoItems = [
   },
 ];
 
+const categories = ['All', 'Breakfast', 'Lunch', 'Treats', 'Dessert'];
+
 const MenuScreen = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [baksoItems, setBaksoItems] = useState(initialBaksoItems);
   const navigation = useNavigation();
-
-  const categories = ['All', 'Breakfast', 'Lunch', 'Treats', 'Dessert'];
+  const {addToCart} = useContext(CartContext);
 
   const handleStarPress = id => {
     setBaksoItems(prevItems =>
@@ -226,11 +229,18 @@ const MenuScreen = () => {
     }
     return <View style={styles.starContainer}>{stars}</View>;
   };
+
   const handleAddToCart = item => {
-    // Add item to cart logic here
-    navigation.navigate('Cart', {item});
+    addToCart(item);
+    navigation.navigate('Cart');
   };
-  const renderBaksoItem = ({ item }) => (
+
+  const filteredItems =
+    selectedCategory === 'All'
+      ? baksoItems
+      : baksoItems.filter(item => item.category === selectedCategory);
+
+  const renderBaksoItem = ({item}) => (
     <View style={styles.productItem} key={item.id}>
       <Image source={item.image} style={styles.productImage} />
       <View style={styles.productInfo}>
@@ -238,7 +248,7 @@ const MenuScreen = () => {
         {renderStars(item.rating, item.id)}
         <View style={styles.productPriceContainer}>
           {item.oldPrice && (
-            <Text style={styles.productOldPrice}>{item.oldPrice}</Text>
+            <Text style={styles.productOldPrice}> {item.oldPrice}</Text>
           )}
           <Text style={styles.productNewPrice}>
             {item.newPrice || item.price}
@@ -247,8 +257,7 @@ const MenuScreen = () => {
         <Text style={styles.productDelivery}>{item.delivery}</Text>
         <TouchableOpacity
           style={styles.addButton}
-          onPress={() => handleAddToCart(item)}
-        >
+          onPress={() => handleAddToCart(item)}>
           <Text style={styles.addButtonText}>Add to cart</Text>
         </TouchableOpacity>
       </View>
@@ -265,25 +274,26 @@ const MenuScreen = () => {
               styles.categoryButton,
               selectedCategory === category && styles.selectedCategoryButton,
             ]}
-            onPress={() => setSelectedCategory(category)}
-          >
+            onPress={() => setSelectedCategory(category)}>
             <Text
               style={[
                 styles.categoryButtonText,
-                selectedCategory === category && styles.selectedCategoryButtonText,
-              ]}
-            >
+                selectedCategory === category &&
+                  styles.selectedCategoryButtonText,
+              ]}>
               {category}
             </Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
+
       <FlatList
-        data={baksoItems}
+        data={filteredItems}
         renderItem={renderBaksoItem}
         keyExtractor={item => item.id}
         numColumns={2}
         contentContainerStyle={styles.productList}
+        nestedScrollEnabled={true}
       />
     </View>
   );

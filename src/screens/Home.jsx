@@ -128,19 +128,19 @@ const HomeScreen = () => {
 
   const handleCategoryPress = categoryId => {
     setSelectedCategory(categoryId);
-    switch (categoryId) {
-      case '2':
-        navigation.navigate('BaksoScreen');
-        break;
-      case '3':
-        navigation.navigate('MieBaksoScreen');
-        break;
-      case '4':
-        navigation.navigate('MinumanScreen');
-        break;
-      default:
-        break;
-    }
+    // switch (categoryId) {
+    //   case '2':
+    //     navigation.navigate('BaksoScreen');
+    //     break;
+    //   case '3':
+    //     navigation.navigate('MieBaksoScreen');
+    //     break;
+    //   case '4':
+    //     navigation.navigate('MinumanScreen');
+    //     break;
+    //   default:
+    //     break;
+    // }
   };
 
   const renderCategoryItem = ({item}) => (
