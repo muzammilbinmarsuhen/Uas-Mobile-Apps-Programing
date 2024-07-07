@@ -1,12 +1,22 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, ScrollView, Image } from 'react-native';
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+  ScrollView,
+  Image,
+} from 'react-native';
 
-const Checkout = ({ route }) => {
-  const { ringkasanPesanan } = route.params || {};
+const Checkout = ({route}) => {
+  const {ringkasanPesanan} = route.params || {};
   const [selectedAddress, setSelectedAddress] = useState('rumah');
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('kartuKredit');
-  const [homeAddress, setHomeAddress] = useState({ phone: '', address: '' });
-  const [officeAddress, setOfficeAddress] = useState({ phone: '', address: '' });
+  const [selectedPaymentMethod, setSelectedPaymentMethod] =
+    useState('kartuKredit');
+  const [homeAddress, setHomeAddress] = useState({phone: '', address: ''});
+  const [officeAddress, setOfficeAddress] = useState({phone: '', address: ''});
 
   const [cardholderName, setCardholderName] = useState('');
   const [cardNumber, setCardNumber] = useState('');
@@ -22,11 +32,16 @@ const Checkout = ({ route }) => {
   }
 
   const calculateTotal = () => {
-    return ringkasanPesanan.reduce((total, item) => total + item.price * item.quantity, 0);
+    return ringkasanPesanan.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0,
+    );
   };
 
   const handleCheckout = () => {
-    Alert.alert('Pesanan Berhasil', 'Pesanan Anda telah diproses.', [{ text: 'OK' }]);
+    Alert.alert('Pesanan Berhasil', 'Pesanan Anda telah diproses.', [
+      {text: 'OK'},
+    ]);
   };
 
   return (
@@ -37,12 +52,15 @@ const Checkout = ({ route }) => {
           style={[
             styles.addressOption,
             selectedAddress === 'rumah' && styles.selectedOption,
-            selectedAddress === 'rumah' && styles.bringToFront
           ]}
-          onPress={() => setSelectedAddress('rumah')}
-        >
+          onPress={() => setSelectedAddress('rumah')}>
           <View style={styles.radioButtonContainer}>
-            <View style={[styles.radioButton, selectedAddress === 'rumah' && styles.radioButtonSelected]} />
+            <View
+              style={[
+                styles.radioButton,
+                selectedAddress === 'rumah' && styles.radioButtonSelected,
+              ]}
+            />
           </View>
           <View style={styles.addressDetails}>
             <Text style={styles.addressText}>Home</Text>
@@ -51,15 +69,18 @@ const Checkout = ({ route }) => {
                 style={styles.inputNoBorder}
                 placeholder="Phone Number"
                 value={homeAddress.phone}
-                onChangeText={(text) => setHomeAddress({ ...homeAddress, phone: text })}
+                onChangeText={text =>
+                  setHomeAddress({...homeAddress, phone: text})
+                }
                 keyboardType="numeric"
               />
-              <View style={styles.divider} />
               <TextInput
                 style={styles.inputNoBorder}
                 placeholder="Address"
                 value={homeAddress.address}
-                onChangeText={(text) => setHomeAddress({ ...homeAddress, address: text })}
+                onChangeText={text =>
+                  setHomeAddress({...homeAddress, address: text})
+                }
               />
             </View>
           </View>
@@ -68,12 +89,15 @@ const Checkout = ({ route }) => {
           style={[
             styles.addressOption,
             selectedAddress === 'kantor' && styles.selectedOption,
-            selectedAddress === 'kantor' && styles.bringToFront
           ]}
-          onPress={() => setSelectedAddress('kantor')}
-        >
+          onPress={() => setSelectedAddress('kantor')}>
           <View style={styles.radioButtonContainer}>
-            <View style={[styles.radioButton, selectedAddress === 'kantor' && styles.radioButtonSelected]} />
+            <View
+              style={[
+                styles.radioButton,
+                selectedAddress === 'kantor' && styles.radioButtonSelected,
+              ]}
+            />
           </View>
           <View style={styles.addressDetails}>
             <Text style={styles.addressText}>Office</Text>
@@ -82,15 +106,18 @@ const Checkout = ({ route }) => {
                 style={styles.inputNoBorder}
                 placeholder="Phone Number"
                 value={officeAddress.phone}
-                onChangeText={(text) => setOfficeAddress({ ...officeAddress, phone: text })}
+                onChangeText={text =>
+                  setOfficeAddress({...officeAddress, phone: text})
+                }
                 keyboardType="numeric"
               />
-              <View style={styles.divider} />
               <TextInput
                 style={styles.inputNoBorder}
                 placeholder="Address"
                 value={officeAddress.address}
-                onChangeText={(text) => setOfficeAddress({ ...officeAddress, address: text })}
+                onChangeText={text =>
+                  setOfficeAddress({...officeAddress, address: text})
+                }
               />
             </View>
           </View>
@@ -98,36 +125,70 @@ const Checkout = ({ route }) => {
       </View>
 
       <Text style={styles.sectionHeaderText}>Payment Method</Text>
-      <ScrollView style={styles.paymentContainer} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.paymentContainer}
+        showsVerticalScrollIndicator={false}>
         <TouchableOpacity
-          style={[styles.paymentOption, selectedPaymentMethod === 'kartuKredit' && styles.selectedPaymentOption]}
-          onPress={() => setSelectedPaymentMethod('kartuKredit')}
-        >
+          style={[
+            styles.paymentOption,
+            selectedPaymentMethod === 'kartuKredit' &&
+              styles.selectedPaymentOption,
+          ]}
+          onPress={() => setSelectedPaymentMethod('kartuKredit')}>
           <View style={styles.paymentLogoContainer}>
-            <Image source={require('../assets/Payment/2.png')} style={styles.paymentLogo} />
+            <Image
+              source={require('../assets/Payment/2.png')}
+              style={styles.paymentLogo}
+            />
             <Text style={styles.paymentText}>Credit Card</Text>
           </View>
-          <View style={[styles.circle, selectedPaymentMethod === 'kartuKredit' && styles.selectedCircle]} />
+          <View
+            style={[
+              styles.circle,
+              selectedPaymentMethod === 'kartuKredit' && styles.selectedCircle,
+            ]}
+          />
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.paymentOption, selectedPaymentMethod === 'paypal' && styles.selectedPaymentOption]}
-          onPress={() => setSelectedPaymentMethod('paypal')}
-        >
+          style={[
+            styles.paymentOption,
+            selectedPaymentMethod === 'paypal' && styles.selectedPaymentOption,
+          ]}
+          onPress={() => setSelectedPaymentMethod('paypal')}>
           <View style={styles.paymentLogoContainer}>
-            <Image source={require('../assets/Payment/3.png')} style={styles.paymentLogo} />
+            <Image
+              source={require('../assets/Payment/3.png')}
+              style={styles.paymentLogo}
+            />
             <Text style={styles.paymentText}>PayPal</Text>
           </View>
-          <View style={[styles.circle, selectedPaymentMethod === 'paypal' && styles.selectedCircle]} />
+          <View
+            style={[
+              styles.circle,
+              selectedPaymentMethod === 'paypal' && styles.selectedCircle,
+            ]}
+          />
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.paymentOption, selectedPaymentMethod === 'googlePay' && styles.selectedPaymentOption]}
-          onPress={() => setSelectedPaymentMethod('googlePay')}
-        >
+          style={[
+            styles.paymentOption,
+            selectedPaymentMethod === 'googlePay' &&
+              styles.selectedPaymentOption,
+          ]}
+          onPress={() => setSelectedPaymentMethod('googlePay')}>
           <View style={styles.paymentLogoContainer}>
-            <Image source={require('../assets/Payment/1.png')} style={styles.paymentLogo} />
+            <Image
+              source={require('../assets/Payment/1.png')}
+              style={styles.paymentLogo}
+            />
             <Text style={styles.paymentText}>Google Pay</Text>
           </View>
-          <View style={[styles.circle, selectedPaymentMethod === 'googlePay' && styles.selectedCircle]} />
+          <View
+            style={[
+              styles.circle,
+              selectedPaymentMethod === 'googlePay' && styles.selectedCircle,
+            ]}
+          />
         </TouchableOpacity>
       </ScrollView>
 
@@ -167,8 +228,12 @@ const Checkout = ({ route }) => {
 
       <View style={styles.summaryContainer}>
         <Text style={styles.summaryText}>Delivery Fee: Rp 30.000</Text>
-        <Text style={styles.summaryText}>Subtotal: Rp {calculateTotal().toLocaleString()}</Text>
-        <Text style={styles.totalText}>Total: Rp {(calculateTotal() + 30000).toLocaleString()}</Text>
+        <Text style={styles.summaryText}>
+          Subtotal: Rp {calculateTotal().toLocaleString()}
+        </Text>
+        <Text style={styles.totalText}>
+          Total: Rp {(calculateTotal() + 30000).toLocaleString()}
+        </Text>
       </View>
 
       <TouchableOpacity style={styles.confirmButton} onPress={handleCheckout}>
@@ -182,7 +247,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    padding: 20,
+    padding: 10,
   },
   headerText: {
     fontSize: 24,
@@ -191,32 +256,33 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   sectionHeaderText: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
     marginVertical: 10,
     color: '#000',
   },
   addressContainer: {
-    flexDirection: 'column', // Changed to column for vertical layout
-    marginBottom: 20,
+    marginBottom: 10,
   },
   addressOption: {
-    borderWidth: 1,
-    borderColor: '#ccc',
     borderRadius: 15,
-    padding: 10,
-    width: '100%', // Changed to full width
+    padding: 15,
+    paddingHorizontal: 20,
+    width: '99%',
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10, // Added margin between options
+    marginBottom: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    backgroundColor: '#fff',
   },
-  selectedOption: {
-    borderColor: '#FFB52E',
-    backgroundColor: '#FFF1C1',
-  },
-  bringToFront: {
-    zIndex: 1,
-  },
+  selectedOption: {},
   addressText: {
     fontSize: 16,
     color: '#000',
@@ -224,6 +290,7 @@ const styles = StyleSheet.create({
   },
   radioButtonContainer: {
     marginRight: 10,
+    alignSelf: 'flex-start',
   },
   radioButton: {
     width: 20,
@@ -237,21 +304,24 @@ const styles = StyleSheet.create({
   },
   addressDetails: {
     flex: 1,
+    alignSelf: 'flex-start',
   },
   inputWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: 'column', // Changed to column for vertical layout
+    alignItems: 'center', // Align items to start of column
   },
   inputNoBorder: {
-    flex: 1,
+    width: '100%',
     paddingVertical: 10,
+    paddingHorizontal: 10,
     color: '#000',
+    marginBottom: 10,
+    borderWidth: 0,
+    borderColor: '#ccc',
+    borderRadius: 5,
   },
-  divider: {
-    width: 1,
-    height: 30,
-    backgroundColor: '#ccc',
-    marginHorizontal: 10,
+  smallInput: {
+    width: '80%',
   },
   paymentContainer: {
     marginBottom: 20,
@@ -260,16 +330,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#ccc',
     borderRadius: 20,
     padding: 10,
     marginVertical: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    backgroundColor: '#fff',
   },
-  selectedPaymentOption: {
-    borderColor: '#FFB52E',
-    backgroundColor: '#FFF1C1',
-  },
+  selectedPaymentOption: {},
   selectedCircle: {
     backgroundColor: '#FFB52E',
     borderColor: '#FFB52E',
@@ -310,7 +384,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   inputSmall: {
-    width: '48%',
+    width: '45%',
   },
   summaryContainer: {
     borderTopWidth: 1,
@@ -318,7 +392,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     marginTop: 20,
     borderRadius: 15,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: '#ccc',
     padding: 10,
   },
@@ -333,11 +407,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   confirmButton: {
-    backgroundColor: '#FFB52E',
+    backgroundColor: '#FF6347',
     paddingVertical: 15,
     borderRadius: 5,
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: 10,
   },
   confirmButtonText: {
     color: '#fff',
