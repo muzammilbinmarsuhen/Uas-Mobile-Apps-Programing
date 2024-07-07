@@ -226,7 +226,7 @@ const initialBaksoItems = [
 
 const categories = ['All', 'Breakfast', 'Lunch', 'Treats', 'Dessert'];
 
-const MenuScreen = () => {
+const Menu = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [baksoItems, setBaksoItems] = useState(initialBaksoItems);
   const navigation = useNavigation();
@@ -253,9 +253,13 @@ const MenuScreen = () => {
   };
 
   const handleAddToCart = item => {
-    addToCart(item);
+    addToCart({
+      ...item,
+      price: parseInt(item.newPrice.replace('Rp ', '').replace('.', '')) // Convert newPrice to number
+    });
     navigation.navigate('Cart');
   };
+  
 
   const filteredItems =
     selectedCategory === 'All'
@@ -417,4 +421,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MenuScreen;
+export default Menu;

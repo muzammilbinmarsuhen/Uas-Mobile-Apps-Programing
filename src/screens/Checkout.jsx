@@ -1,102 +1,54 @@
-import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-  FlatList,
-  Alert,
-} from 'react-native';
+import React from 'react';
+import {View, Text, StyleSheet, TouchableOpacity, Alert} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {CartContext} from './CartContext';
 
-const orderSummary = [
-  {id: '1', name: 'Bakso Sapi', quantity: 2, price: 15000},
-  {id: '2', name: 'Mie Ayam', quantity: 1, price: 20000},
-]; // Ganti dengan ringkasan pesanan Anda
+const Checkout = ({route}) => {
+  const { ringkasanPesanan } = route.params || {};
 
-const CheckoutScreen = () => {
-  const [name, setName] = useState('');
-  const [address, setAddress] = useState('');
-  const [phone, setPhone] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState('');
+  if (!ringkasanPesanan) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.headerText}>Tidak ada pesanan yang ditemukan</Text>
+      </View>
+    );
+  }
 
   const calculateTotal = () => {
-    return orderSummary.reduce(
+    return ringkasanPesanan.reduce(
       (total, item) => total + item.price * item.quantity,
       0,
     );
   };
 
-  const confirmOrder = () => {
-    if (name && address && phone && paymentMethod) {
-      Alert.alert('Pesanan Berhasil', 'Pesanan Anda telah diproses.', [
-        {text: 'OK'},
-      ]);
-    } else {
-      Alert.alert('Error', 'Harap lengkapi semua informasi.');
-    }
+  const handleCheckout = () => {
+    // Logika untuk proses checkout
+    // Misalnya, validasi data, proses pembayaran, dll.
+    Alert.alert('Pesanan Berhasil', 'Pesanan Anda telah diproses.', [
+      {text: 'OK'},
+    ]);
   };
-
-  const renderOrderItem = ({item}) => (
-    <View style={styles.orderItem} key={item.id}>
-      <Text style={styles.orderItemText}>
-        {item.name} x{item.quantity}
-      </Text>
-      <Text style={styles.orderItemText}>Rp {item.price.toLocaleString()}</Text>
-    </View>
-  );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.headerText}>Informasi Pelanggan</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Nama"
-        value={name}
-        onChangeText={setName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Alamat"
-        value={address}
-        onChangeText={setAddress}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Nomor Telepon"
-        value={phone}
-        onChangeText={setPhone}
-        keyboardType="phone-pad"
-      />
-
-      <Text style={styles.headerText}>Metode Pembayaran</Text>
-      <View>
-        {['Cash', 'Transfer'].map((method, index) => (
-          <TouchableOpacity
-            key={index}
-            style={[
-              styles.paymentButton,
-              paymentMethod === method && styles.paymentButtonSelected,
-            ]}
-            onPress={() => setPaymentMethod(method)}>
-            <Text style={styles.paymentButtonText}>{method}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-
       <Text style={styles.headerText}>Ringkasan Pesanan</Text>
-      <FlatList
-        data={orderSummary}
-        renderItem={renderOrderItem}
-        keyExtractor={item => item.id}
-        style={styles.orderSummary}
-      />
-      <Text style={styles.totalText}>
-        Total: Rp {calculateTotal().toLocaleString()}
-      </Text>
-
-      <TouchableOpacity style={styles.confirmButton} onPress={confirmOrder}>
-        <Text style={styles.confirmButtonText}>Konfirmasi Pesanan</Text>
+      <View style={styles.orderSummaryContainer}>
+        {ringkasanPesanan.map(item => (
+          <View key={item.id} style={styles.orderItem}>
+            <Text style={styles.orderItemText}>
+              {item.name} x {item.quantity}
+            </Text>
+            <Text style={styles.orderItemText}>
+              Rp {(item.price * item.quantity).toLocaleString()}
+            </Text>
+          </View>
+        ))}
+        <Text style={styles.orderTotalText}>
+          Total Keseluruhan: Rp {calculateTotal().toLocaleString()}
+        </Text>
+      </View>
+      <TouchableOpacity style={styles.confirmButton} onPress={handleCheckout}>
+        <Text style={styles.confirmButtonText}>Checkout</Text>
       </TouchableOpacity>
     </View>
   );
@@ -105,40 +57,18 @@ const CheckoutScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFF1C1',
     padding: 20,
   },
   headerText: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: 'bold',
-    marginVertical: 10,
+    textAlign: 'center',
+    marginVertical: 20,
+    color: '#FFB52E',
   },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
-    backgroundColor: '#f9f9f9',
-  },
-  paymentButton: {
-    backgroundColor: '#fff',
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    marginVertical: 5,
-  },
-  paymentButtonSelected: {
-    borderColor: '#FF6347',
-  },
-  paymentButtonText: {
-    color: '#000',
-    fontSize: 16,
-  },
-  orderSummary: {
-    marginVertical: 10,
+  orderSummaryContainer: {
+    marginBottom: 20,
   },
   orderItem: {
     flexDirection: 'row',
@@ -147,19 +77,18 @@ const styles = StyleSheet.create({
   },
   orderItemText: {
     fontSize: 16,
+    color: '#000',
   },
-  totalText: {
+  orderTotalText: {
     fontSize: 18,
     fontWeight: 'bold',
-    textAlign: 'right',
-    marginVertical: 10,
+    marginTop: 10,
   },
   confirmButton: {
-    backgroundColor: '#FF6347',
+    backgroundColor: '#FFB52E',
     paddingVertical: 15,
     borderRadius: 5,
     alignItems: 'center',
-    marginTop: 20,
   },
   confirmButtonText: {
     color: '#fff',
@@ -168,4 +97,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CheckoutScreen;
+export default Checkout;

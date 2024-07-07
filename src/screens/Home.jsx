@@ -72,7 +72,7 @@ const categories = [
   {id: '4', name: 'Juna Rorimpandey', image: require('../assets/chef4.jpeg')},
 ];
 
-const HomeScreen = () => {
+const Home = () => {
   const navigation = useNavigation();
 
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
@@ -409,4 +409,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default Home;
