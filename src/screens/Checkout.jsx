@@ -300,7 +300,8 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
   },
   radioButtonSelected: {
-    backgroundColor: '#FFB52E',
+    backgroundColor: '#FF6347',
+    borderColor: '#FF6347',
   },
   addressDetails: {
     flex: 1,
@@ -345,8 +346,8 @@ const styles = StyleSheet.create({
   },
   selectedPaymentOption: {},
   selectedCircle: {
-    backgroundColor: '#FFB52E',
-    borderColor: '#FFB52E',
+    backgroundColor: '#FF6347',
+    borderColor: '#FF6347',
   },
   circle: {
     width: 20,
